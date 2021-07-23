@@ -3,7 +3,7 @@ import Menu from './Menu';
 
 const Header = () => {
   return (
-    <Container maxWidth="container.xl" py={2}>
+    <Container maxWidth="container.xl" py={2} borderBottom={1} shadow="sm">
       <Flex as="header" alignItems="center" justifyContent="space-between">
         <Box>header</Box>
         <Flex>

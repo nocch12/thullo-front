@@ -1,14 +1,47 @@
+import { VFC } from 'react';
+import NextLink from 'next/link';
 import {
   IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  MenuItemProps,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import Link from '../Link';
+
+import { useAuthContext } from '../../store/auth/AuthContext';
+
+const NextMenuItem: VFC<MenuItemProps & { href: string }> = ({
+  href,
+  ...props
+}) => (
+  <NextLink href={href} passHref>
+    <MenuItem {...props} />
+  </NextLink>
+);
 
 const HambergerMenu = () => {
+  const { user } = useAuthContext();
+
+  const GuestMenu = (
+    <>
+      <MenuItem as="a" href="/register">
+        登録
+      </MenuItem>
+      <NextMenuItem href="/register">登録</NextMenuItem>
+      <NextMenuItem href="/login">ログイン</NextMenuItem>
+    </>
+  );
+
+  const UserMenu = (
+    <>
+      <NextLink href="/logout" passHref>
+        <NextMenuItem href="/logout">ログイン</NextMenuItem>
+      </NextLink>
+    </>
+  );
+
   return (
     <Menu>
       <MenuButton
@@ -17,9 +50,7 @@ const HambergerMenu = () => {
         icon={<HamburgerIcon />}
         variant="outline"
       />
-      <MenuList>
-        <MenuItem as={Link} href="/login">Login</MenuItem>
-      </MenuList>
+      <MenuList>{user ? UserMenu : GuestMenu}</MenuList>
     </Menu>
   );
 };
