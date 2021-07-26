@@ -36,9 +36,7 @@ const HambergerMenu = () => {
 
   const UserMenu = (
     <>
-      <NextLink href="/logout" passHref>
-        <NextMenuItem href="/logout">ログイン</NextMenuItem>
-      </NextLink>
+      <NextMenuItem href="/logout">ログアウト</NextMenuItem>
     </>
   );
 

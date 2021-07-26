@@ -1,6 +1,8 @@
-import { useState, Dispatch, SetStateAction, createContext, useContext, VFC } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction, createContext, useContext, VFC } from 'react';
 
-type User = undefined | {
+import { getMe } from '../../api/user';
+
+type User = undefined | null | {
   name: string;
 };
 
@@ -24,13 +26,25 @@ type Props = {
 export const AuthProvider: VFC<Props> = ({ children }) => {
   const [user, setUser] = useState<User>(undefined);
 
+  useEffect(() => {
+    const auth = async () => {
+      try {
+        const { data } = await getMe(); 
+        setUser(data.user);
+      } catch (e) {
+        setUser(null);
+      }
+    }
+    auth();
+  }, []);
+
   const value = {
     user, setUser
   }
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {user !== undefined && children}
     </AuthContext.Provider>
   )
 } 
