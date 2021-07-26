@@ -8,7 +8,6 @@ import { axios } from '../libs/axios';
 
 const MyApp = ({ Component, pageProps }) => {
   const [csrfInit, setCsrfInit] = useState(false);
-  const [authInit, setAuthInit] = useState(false);
 
   useEffect(() => {
     const csrf = async () => {
@@ -19,7 +18,7 @@ const MyApp = ({ Component, pageProps }) => {
     csrf();
   }, []);
 
-  return csrfInit && authInit ? (
+  return csrfInit && (
     <ChakraProvider>
       <AuthProvider>
         <Layout>
@@ -27,7 +26,7 @@ const MyApp = ({ Component, pageProps }) => {
         </Layout>
       </AuthProvider>
     </ChakraProvider>
-  ) : null;
+  );
 };
 
 export default MyApp;
