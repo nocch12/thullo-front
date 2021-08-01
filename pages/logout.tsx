@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { logout as logoutApi } from '../api/user';
-import { useAuthContext } from '../store/auth/AuthContext';
-
+import useUser from '../hooks/useUser';
 
 const logout = () => {
-  const { user, setUser } = useAuthContext();
+  const { user, setUser } = useUser();
   const router = useRouter();
 
   useEffect(() => {

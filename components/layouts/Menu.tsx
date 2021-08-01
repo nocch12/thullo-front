@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-import { useAuthContext } from '../../store/auth/AuthContext';
+import useUser from '../../hooks/useUser';
 
 const NextMenuItem: VFC<MenuItemProps & { href: string }> = ({
   href,
@@ -22,7 +22,7 @@ const NextMenuItem: VFC<MenuItemProps & { href: string }> = ({
 );
 
 const HambergerMenu = () => {
-  const { user } = useAuthContext();
+  const { user } = useUser();
 
   const GuestMenu = (
     <>

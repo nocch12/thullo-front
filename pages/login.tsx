@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
-import { useAuthContext } from '../store/auth/AuthContext';
+import useUser from '../hooks/useUser';
 import { login } from '../api/user';
 
 const Login: React.VFC = () => {
-  const { setUser } = useAuthContext();
+  const { setUser } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

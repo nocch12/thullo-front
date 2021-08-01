@@ -1,30 +1,20 @@
-import { useState, useEffect } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { AuthProvider } from '../store/auth/AuthContext';
+import { RecoilRoot } from 'recoil';
+
+import Initialize from '../middleware/Initialize';
 import Layout from '../components/layouts/Layout';
 
-import { getCsrf } from '../api/csrf';
-import { axios } from '../libs/axios';
 
 const MyApp = ({ Component, pageProps }) => {
-  const [csrfInit, setCsrfInit] = useState(false);
-
-  useEffect(() => {
-    const csrf = async () => {
-      const { data } = await getCsrf();
-      axios.defaults.headers.post['X-CSRF-Token'] = data.csrfToken;
-      setCsrfInit(true);
-    }
-    csrf();
-  }, []);
-
-  return csrfInit && (
+  return (
     <ChakraProvider>
-      <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AuthProvider>
+      <RecoilRoot>
+        <Initialize>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Initialize>
+      </RecoilRoot>
     </ChakraProvider>
   );
 };
