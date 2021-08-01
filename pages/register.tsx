@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
-import { axios } from '../libs/axios';
+import useRegister from '../hooks/useRegister';
+import withoutAuth from '..//middleware/withoutAuth';
 
 const Register: React.VFC = () => {
+  const { register, error } = useRegister();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const registerAction = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data } = await axios.post('/user/register', {
-      name,
-      email,
-      password,
-    });
-    console.log('====================================');
-    console.log(data);
-    console.log('====================================');
+    register(name, email, password);
   };
 
   return (
@@ -48,4 +43,4 @@ const Register: React.VFC = () => {
   );
 };
 
-export default Register;
+export default withoutAuth(Register);

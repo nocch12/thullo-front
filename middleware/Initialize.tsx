@@ -1,33 +1,21 @@
-import { VFC, PropsWithChildren, useState, useEffect } from 'react';
+import { VFC, PropsWithChildren, useEffect } from 'react';
 
 import useUser from '../hooks/useUser';
 import { getCsrf } from '../api/csrf';
 
 
 const Initialize: VFC<PropsWithChildren<{}>> = ({ children }) => {
-  const [initCsrf, setInitCsrf] = useState(false);
-  const { user, getUser } = useUser();
-
-  const csrfAction = async () => {
-    try {
-      await getCsrf();
-      setInitCsrf(true);
-    } catch (e) {
-
-    }
-  }
+  const { getUser } = useUser();
 
   useEffect(() => {
     const initAction = async () => {
-      await csrfAction();
-      getUser();
+      await getCsrf();
+      await getUser();
     }
     initAction();
   }, []);
 
-  const init = initCsrf && user !== undefined;
-
-  return <>{init ? children : null}</>;
+  return <>{ children }</>;
 };
 
 export default Initialize;

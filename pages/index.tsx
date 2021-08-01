@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import withAuth from '../middleware/withAuth';
 
 const Home = () => {
   return (
@@ -14,4 +15,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withAuth(Home);

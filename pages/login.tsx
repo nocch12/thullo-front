@@ -1,20 +1,19 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
-import useUser from '../hooks/useUser';
-import { login } from '../api/user';
+import useLogin from '../hooks/useLogin';
+
+import withoutAuth from '..//middleware/withoutAuth';
 
 const Login: React.VFC = () => {
-  const { setUser } = useUser();
+  const { login, error } = useLogin();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const loginAction = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data } = await login(email, password);
-
-    setUser(data.user);
+    await login(email, password);
   };
 
   return (
@@ -45,4 +44,4 @@ const Login: React.VFC = () => {
   );
 };
 
-export default Login;
+export default withoutAuth(Login);

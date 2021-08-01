@@ -1,15 +1,22 @@
 import { axios } from '../libs/axios';
-import {User} from './types/user'
+import { User } from './types/user';
+
+export const register = (email: string, password: string) => {
+  return axios.post<{ user: User }>('/user/register', {
+    email,
+    password,
+  });
+};
 
 export const login = (email: string, password: string) => {
-  return axios.post<{user: User}>('/user/login', {
+  return axios.post<{ user: User }>('/user/login', {
     email,
     password,
   });
 };
 
 export const getMe = () => {
-  return axios.get<{user: User}>('/user/me');
+  return axios.get<{ user: User }>('/user/me');
 };
 
 export const logout = () => {
