@@ -9,7 +9,7 @@ const withAuth = (Component: VFC) => {
     const router = useRouter();
     useEffect(() => {
       if (!user) {
-        router.push('/login');
+        router.replace('/login');
       } else {
         setChecked(true);
       }
