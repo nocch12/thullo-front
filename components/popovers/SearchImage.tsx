@@ -15,15 +15,14 @@ import {
   Box,
 } from '@chakra-ui/react';
 import SearchInput from '../forms/SearchInput';
-import { searchImage as searchImageAPI } from '../../api/images';
-import { PixabayImage } from '../../api/types/pixabay';
+import { searchImage as searchImageAPI, TPixabayImage } from '../../api/image';
 
 type Props = {
   onSelectImage: (url: string) => void;
 };
 
 const SearchImage: VFC<PropsWithChildren<Props>> = ({ onSelectImage, children }) => {
-  const [images, setImages] = useState<PixabayImage[]>([]);
+  const [images, setImages] = useState<TPixabayImage[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useBoolean();
 

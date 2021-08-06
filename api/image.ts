@@ -1,8 +1,12 @@
 import axios from 'axios';
-import { PixabayImage } from './types/pixabay';
+
+export type TPixabayImage = {
+  largeImageURL: string;
+  previewURL: string;
+}
 
 export const searchImage = (q: string) => {
-  return axios.get<{ hits: PixabayImage[] }>('https://pixabay.com/api/', {
+  return axios.get<{ hits: TPixabayImage[] }>('https://pixabay.com/api/', {
     params: {
       q,
       image_type: 'photo',

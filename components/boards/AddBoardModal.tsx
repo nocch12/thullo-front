@@ -1,4 +1,4 @@
-import { VFC, useState } from 'react';
+import { VFC, useState, ChangeEvent } from 'react';
 import {
   Box,
   Flex,
@@ -18,22 +18,45 @@ import {
 import { AddIcon, AttachmentIcon } from '@chakra-ui/icons';
 import PublicityButton from './PublicityButton';
 import SearchImage from '../popovers/SearchImage';
+import { addBoard } from '../../api/board';
 
-const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
-  isOpen,
-  onClose,
-}) => {
+type Props = Partial<UseDisclosureReturn> & {
+  onAdded?: () => void;
+};
+
+const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
+  const [name, setName] = useState('');
   const [publicity, setPublicity] = useState(false);
   const [image, setImage] = useState('');
 
-  const handleChangePublicity = () => setPublicity((oldValue) => !oldValue);
+  const handleChangePublicity = () => setPublicity((prev) => !prev);
 
   const handleSelectImage = (url: string) => {
     setImage(url);
   };
 
+  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handleAddBoard = async () => {
+    try {
+      const res = await addBoard(name, image, publicity);
+
+      onClose();
+      onAdded();
+    } catch (e) {}
+  };
+
+  const handleClose = () => {
+    setName('');
+    setImage('');
+    setPublicity(false);
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -49,7 +72,12 @@ const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
         <ModalCloseButton />
         <ModalBody>
           <Box>
-            <Input mb="6" shadow="md" />
+            <Input
+              mb="6"
+              shadow="sm"
+              value={name}
+              onChange={handleChangeName}
+            />
             <Flex justify="space-between">
               <SearchImage onSelectImage={handleSelectImage}>
                 <Button
@@ -73,7 +101,12 @@ const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
           <Button colorScheme="gray" mr={3} onClick={onClose} size="sm">
             キャンセル
           </Button>
-          <Button leftIcon={<AddIcon />} colorScheme="teal" size="sm">
+          <Button
+            leftIcon={<AddIcon />}
+            colorScheme="teal"
+            size="sm"
+            onClick={handleAddBoard}
+          >
             追加
           </Button>
         </ModalFooter>
