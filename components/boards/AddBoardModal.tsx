@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { VFC, useState } from 'react';
 import {
   Box,
   Flex,
@@ -13,19 +13,25 @@ import {
   ModalCloseButton,
   UseDisclosureReturn,
   Image,
-  Spacer
+  Spacer,
 } from '@chakra-ui/react';
-import {
-  AddIcon,
-  AttachmentIcon,
-  LockIcon,
-  UnlockIcon,
-} from '@chakra-ui/icons';
+import { AddIcon, AttachmentIcon } from '@chakra-ui/icons';
+import PublicityButton from './PublicityButton';
+import SearchImage from '../popovers/SearchImage';
 
 const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
   isOpen,
   onClose,
 }) => {
+  const [publicity, setPublicity] = useState(false);
+  const [image, setImage] = useState('');
+
+  const handleChangePublicity = () => setPublicity((oldValue) => !oldValue);
+
+  const handleSelectImage = (url: string) => {
+    setImage(url);
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -33,10 +39,10 @@ const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
         <ModalHeader>
           <Image
             h="120px"
-            w="100%"
+            w="full"
             objectFit="cover"
-            src="gibbresh.png"
-            fallbackSrc="https://via.placeholder.com/150"
+            src={image}
+            fallbackSrc={image || 'https://via.placeholder.com/150'}
             rounded="md"
           />
         </ModalHeader>
@@ -45,25 +51,29 @@ const AddBoardModal: VFC<Partial<UseDisclosureReturn>> = ({
           <Box>
             <Input mb="6" shadow="md" />
             <Flex justify="space-between">
-              <Button
-                colorScheme="gray"
-                leftIcon={<AttachmentIcon />}
-                flexGrow={1}
-              >
-                Cover
-              </Button>
+              <SearchImage onSelectImage={handleSelectImage}>
+                <Button
+                  colorScheme="gray"
+                  leftIcon={<AttachmentIcon />}
+                  flexGrow={1}
+                  size="sm"
+                >
+                  Cover
+                </Button>
+              </SearchImage>
               <Spacer />
-              <Button colorScheme="gray" leftIcon={<LockIcon />} flexGrow={1}>
-                Private
-              </Button>
+              <PublicityButton
+                isPublic={publicity}
+                onClick={handleChangePublicity}
+              />
             </Flex>
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="gray" mr={3} onClick={onClose}>
+          <Button colorScheme="gray" mr={3} onClick={onClose} size="sm">
             キャンセル
           </Button>
-          <Button leftIcon={<AddIcon />} colorScheme="teal">
+          <Button leftIcon={<AddIcon />} colorScheme="teal" size="sm">
             追加
           </Button>
         </ModalFooter>

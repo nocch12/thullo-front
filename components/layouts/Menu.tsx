@@ -47,6 +47,7 @@ const HambergerMenu = () => {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="outline"
+        size="sm"
       />
       <MenuList>{user ? UserMenu : GuestMenu}</MenuList>
     </Menu>

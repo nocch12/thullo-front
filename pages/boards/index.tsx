@@ -24,12 +24,12 @@ const index = () => {
           All Boards
         </Heading>
         <Spacer />
-        <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
+        <Button leftIcon={<AddIcon />} colorScheme="teal" size="sm" onClick={onOpen}>
           add
         </Button>
       </Flex>
       <Spacer mb="4" />
-      <Wrap spacing="10" justify="space-between" alignItems="center">
+      <Wrap spacing="10" justify="space-around" alignItems="center">
         <WrapItem>
           <Board />
         </WrapItem>

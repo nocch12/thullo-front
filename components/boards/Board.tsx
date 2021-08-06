@@ -11,10 +11,10 @@ import {
 
 const Board = () => {
   return (
-    <LinkBox shadow="md" rounded="md" w="260px" p={2}>
+    <LinkBox shadow="md" rounded="md" maxW="300px" p={2}>
       <Image
         h="150px"
-        w="100%"
+        w="full"
         src="gibbresh.png"
         fallbackSrc="https://via.placeholder.com/150"
       />
