@@ -9,7 +9,7 @@ type Props = {
 
 const Layout: VFC<Props> = ({ children }) => {
   return (
-    <Flex minHeight="100vh" flexDirection="column">
+    <Flex h="100vh" flexDirection="column">
       <Header />
       <Box as="main" flexGrow={1} pt={6}>
         {children}

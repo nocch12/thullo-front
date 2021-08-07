@@ -8,7 +8,8 @@ import {
   MenuItem,
   MenuItemProps,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { Icon } from '@chakra-ui/icons';
+import { MdMenu } from 'react-icons/md';
 
 import useUser from '../../hooks/useUser';
 
@@ -45,7 +46,7 @@ const HambergerMenu = () => {
       <MenuButton
         as={IconButton}
         aria-label="Options"
-        icon={<HamburgerIcon />}
+        icon={<Icon as={MdMenu} />}
         variant="outline"
         size="sm"
       />

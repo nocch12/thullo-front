@@ -1,11 +1,12 @@
-import { FormEvent, VFC, useState, ChangeEvent, useEffect, memo } from 'react';
+import { FormEvent, VFC, ChangeEvent } from 'react';
 import {
   IconButton,
   InputGroup,
   Input,
   InputRightElement,
 } from '@chakra-ui/react';
-import { SearchIcon } from '@chakra-ui/icons';
+import { Icon } from '@chakra-ui/icons';
+import { MdSearch } from 'react-icons/md';
 
 type Props = {
   value: string;
@@ -35,7 +36,7 @@ const SearchInput: VFC<Props> = ({ value, onChange, onSearch }) => {
       <InputRightElement>
         <IconButton
           aria-label="search"
-          icon={<SearchIcon />}
+          icon={<Icon as={MdSearch} />}
           type="submit"
           size="xs"
           colorScheme="teal"

@@ -15,7 +15,8 @@ import {
   Image,
   Spacer,
 } from '@chakra-ui/react';
-import { AddIcon, AttachmentIcon } from '@chakra-ui/icons';
+import { Icon } from '@chakra-ui/icons';
+import { MdAdd, MdImage } from 'react-icons/md';
 import PublicityButton from './PublicityButton';
 import SearchImage from '../popovers/SearchImage';
 import { addBoard } from '../../api/board';
@@ -82,7 +83,7 @@ const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
               <SearchImage onSelectImage={handleSelectImage}>
                 <Button
                   colorScheme="gray"
-                  leftIcon={<AttachmentIcon />}
+                  leftIcon={<Icon as={MdImage} />}
                   flexGrow={1}
                   size="sm"
                 >
@@ -91,6 +92,7 @@ const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
               </SearchImage>
               <Spacer />
               <PublicityButton
+                flexGrow={1}
                 isPublic={publicity}
                 onClick={handleChangePublicity}
               />
@@ -102,7 +104,7 @@ const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
             キャンセル
           </Button>
           <Button
-            leftIcon={<AddIcon />}
+            leftIcon={<Icon as={MdAdd} />}
             colorScheme="teal"
             size="sm"
             onClick={handleAddBoard}

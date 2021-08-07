@@ -9,9 +9,10 @@ import {
   Spacer,
   useDisclosure,
 } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
-import Board from '../../components/boards/Board';
-import AddBoardModal from '../../components/boards/AddBoardModal';
+import { Icon } from '@chakra-ui/icons';
+import { MdAdd } from 'react-icons/md';
+import Board from '../../components/board/Board';
+import AddBoardModal from '../../components/board/AddBoardModal';
 
 const index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,8 +25,13 @@ const index = () => {
           All Boards
         </Heading>
         <Spacer />
-        <Button leftIcon={<AddIcon />} colorScheme="teal" size="sm" onClick={onOpen}>
-          add
+        <Button
+          leftIcon={<Icon as={MdAdd} />}
+          colorScheme="teal"
+          size="sm"
+          onClick={onOpen}
+        >
+          新規作成
         </Button>
       </Flex>
       <Spacer mb="4" />

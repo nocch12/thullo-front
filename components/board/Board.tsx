@@ -19,11 +19,11 @@ const Board = () => {
         fallbackSrc="https://via.placeholder.com/150"
       />
       <Heading as="h5" fontSize="lg" py="2" isTruncated>
-        <NextLink href="/" passHref>
+        <NextLink href="/boards/t" passHref>
           <LinkOverlay>testfaefefawefwafefaefeafewaf</LinkOverlay>
         </NextLink>
       </Heading>
-      <AvatarGroup size="md" max={2}>
+      <AvatarGroup size="sm" max={2}>
         <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
         <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
         <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
