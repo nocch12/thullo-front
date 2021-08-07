@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Container,
   HStack,
@@ -14,8 +15,12 @@ import PublicityButton from '../../../components/board/PublicityButton';
 import BoardMembers from '../../../components/board/BoardMembers';
 import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
 import TaskList from '../../../components/task/TaskList';
+import TaskModal from '../../../components/task/TaskModal/TaskModal';
 
 const boardTop = () => {
+  const { query } = useRouter();
+  const { t } = query;
+
   const handleChangePublicity = () => {};
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -62,6 +67,7 @@ const boardTop = () => {
         <Box minW="200px">a</Box>
         <Box minW="200px">a</Box>
       </HStack>
+      {typeof t === 'string' && <TaskModal taskId={t} />}
     </Container>
   );
 };

@@ -28,7 +28,7 @@ const TaskCard = () => {
         mb="2"
       />
       {/* タイトル */}
-      <Link href="/" passHref>
+      <Link href="/boards/t?t=5454" passHref>
         <LinkOverlay>
           <Text mb="2" fontWeight="bold">
             title
