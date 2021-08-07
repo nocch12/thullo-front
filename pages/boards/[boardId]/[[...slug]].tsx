@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Container,
@@ -18,8 +18,17 @@ import TaskList from '../../../components/task/TaskList';
 import TaskModal from '../../../components/task/TaskModal/TaskModal';
 
 const boardTop = () => {
+  const [taskId, setTaskId] = useState('');
   const { query } = useRouter();
-  const { t } = query;
+  const { boardId, slug } = query;
+
+  useEffect(() => {
+    if (Array.isArray(slug)) {
+      setTaskId(slug[0]);
+    } else {
+      setTaskId('');
+    }
+  }, [slug]);
 
   const handleChangePublicity = () => {};
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,7 +76,7 @@ const boardTop = () => {
         <Box minW="200px">a</Box>
         <Box minW="200px">a</Box>
       </HStack>
-      {typeof t === 'string' && <TaskModal taskId={t} />}
+      {typeof taskId === 'string' && <TaskModal taskId={taskId} />}
     </Container>
   );
 };

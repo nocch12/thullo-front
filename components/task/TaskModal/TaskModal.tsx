@@ -10,13 +10,19 @@ import {
   ModalCloseButton,
   Image,
   Box,
+  Button,
   Flex,
   Text,
   Heading,
+  Icon,
+  VStack,
 } from '@chakra-ui/react';
+import { MdAccountCircle, MdImage, MdLabel, MdPeople } from 'react-icons/md';
 
+import Account from '../../Account';
 import TaskModalDescription from './TaskModalDescription';
 import TaskModalAttachment from './TaskModalAttachment';
+import SearchImage from '../../popovers/SearchImage';
 
 type Props = {
   taskId: string;
@@ -32,6 +38,8 @@ const TaskModal: VFC<Props> = ({ taskId }) => {
       query: { boardId: router.query.boardId },
     });
   };
+
+  const handleSelectImage = () => {};
 
   return (
     <Modal size="4xl" isOpen={!!taskId} onClose={onClose}>
@@ -75,7 +83,48 @@ const TaskModal: VFC<Props> = ({ taskId }) => {
               {/* コメント */}
             </Box>
             {/* モーダル右 */}
-            <Box w="300px">actions</Box>
+            <Box w="200px">
+              <Box mb="6">
+                <Flex color="gray" alignItems="center" mb="4">
+                  <Icon as={MdAccountCircle} />
+                  <Text ml="2">その他</Text>
+                </Flex>
+                <VStack alignItems="stretch" spacing="4">
+                  <SearchImage onSelectImage={handleSelectImage}>
+                    <Button
+                      colorScheme="gray"
+                      leftIcon={<Icon as={MdImage} />}
+                      size="sm"
+                      justifyContent="flex-start"
+                    >
+                      カバー画像
+                    </Button>
+                  </SearchImage>
+                  <Button
+                    colorScheme="gray"
+                    leftIcon={<Icon as={MdLabel} />}
+                    size="sm"
+                    justifyContent="flex-start"
+                  >
+                    ラベル
+                  </Button>
+                </VStack>
+              </Box>
+              <Box>
+                <Flex color="gray" alignItems="center" mb="4">
+                  <Icon as={MdPeople} />
+                  <Text ml="2">担当</Text>
+                </Flex>
+                <VStack spacing="2" alignItems="flex-start">
+                  <Account>
+                    <Text>test</Text>
+                  </Account>
+                  <Account>
+                    <Text>test</Text>
+                  </Account>
+                </VStack>
+              </Box>
+            </Box>
           </Flex>
         </ModalBody>
 
