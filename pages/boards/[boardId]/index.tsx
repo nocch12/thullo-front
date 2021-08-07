@@ -12,7 +12,7 @@ import {MdMoreHoriz} from 'react-icons/md';
 import PublicityButton from '../../../components/board/PublicityButton';
 
 import BoardMembers from '../../../components/board/BoardMembers';
-import BoardDrawer from '../../../components/board/BoardDrawer';
+import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
 
 const boardTop = () => {
   const handleChangePublicity = () => {};
