@@ -8,18 +8,24 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
-import {MdMoreHoriz} from 'react-icons/md';
+import { MdMoreHoriz } from 'react-icons/md';
 import PublicityButton from '../../../components/board/PublicityButton';
 
 import BoardMembers from '../../../components/board/BoardMembers';
 import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
+import TaskList from '../../../components/task/TaskList';
 
 const boardTop = () => {
   const handleChangePublicity = () => {};
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Container maxWidth="container.xl" h="full">
+    <Container
+      maxWidth="container.xl"
+      h="full"
+      display="flex"
+      flexDirection="column"
+    >
       <Flex alignItems="center" mb="4">
         <PublicityButton
           mr="2"
@@ -30,6 +36,7 @@ const boardTop = () => {
         <Button
           ml="2"
           size="sm"
+          minW="fit-content"
           leftIcon={<Icon as={MdMoreHoriz} />}
           onClick={onOpen}
         >
@@ -37,7 +44,16 @@ const boardTop = () => {
         </Button>
         <BoardDrawer isOpen={isOpen} onClose={onClose} />
       </Flex>
-      <HStack h="full" overflowX="auto" spacing={4} alignItems="flex-start">
+      <HStack
+        overflowX="auto"
+        spacing={4}
+        flexGrow={1}
+        alignItems="flex-start"
+        bgColor="teal.50"
+        p="4"
+        rounded="md"
+      >
+        <TaskList />
         <Box minW="200px">a</Box>
         <Box minW="200px">a</Box>
         <Box minW="200px">a</Box>

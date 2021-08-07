@@ -15,6 +15,7 @@ const PublicityButton: VFC<Props> = ({ isPublic, colorScheme, leftIcon, size, ..
       colorScheme={isPublic ? 'teal' : 'gray'}
       leftIcon={isPublic ? <Icon as={MdLockOutline} /> : <Icon as={MdLockOpen} />}
       size="sm"
+      minW="fit-content"
       {...props}
     >
       {isPublic ? '公開' : '非公開'}

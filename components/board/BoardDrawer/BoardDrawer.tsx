@@ -1,27 +1,19 @@
 import { VFC } from 'react';
 import {
-  Container,
-  VStack,
   Flex,
   Box,
-  Button,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  useDisclosure,
   Text,
-  Table,
-  Tbody,
-  Tr,
-  Td,
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
-import { MdAccountCircle, MdDescription, MdEdit } from 'react-icons/md';
+import { MdAccountCircle } from 'react-icons/md';
 import Account from '../../Account';
+import BoardDrawerDescriotionSection from './BoardDrawerDescriotionSection';
 import BoardDrawerMemberSection from './BoardDrawerMemberSection';
 
 type Props = {
@@ -58,31 +50,10 @@ const BoardDrawer: VFC<Props> = ({ isOpen, onClose }) => {
           </Box>
 
           <Box mb="6">
-            <Flex alignItems="center" mb="4">
-              <Icon as={MdDescription} color="gray" />
-              <Text ml="2" color="gray" fontSize="xs">
-                詳細
-              </Text>
-              <Button
-                ml="2"
-                leftIcon={<Icon as={MdEdit} />}
-                size="xs"
-                color="gray"
-                variant="outline"
-              >
-                編集
-              </Button>
-            </Flex>
-            <Box as="pre">{`gsrg\ngsrgreggsrgagra  grs\n\ngrsgrgs`}</Box>
+            <BoardDrawerDescriotionSection />
           </Box>
 
           <Box mb="6">
-            <Flex alignItems="center" mb="4">
-              <Icon as={MdDescription} color="gray" />
-              <Text ml="2" color="gray" fontSize="xs">
-                メンバー
-              </Text>
-            </Flex>
             <BoardDrawerMemberSection />
           </Box>
         </DrawerBody>
