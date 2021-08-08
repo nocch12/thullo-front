@@ -13,12 +13,9 @@ import { Icon } from '@chakra-ui/icons';
 import { MdAdd, MdDescription } from 'react-icons/md';
 import Attachment from './Attachment';
 import Alert from '../../Alert';
+import SectionHeader from '../../SectionHeader';
 
-const attachments = [
-  {},
-  {},
-  {},
-];
+const attachments = [{}, {}, {}];
 
 const TaskModalAttachment = () => {
   const [deleteId, setDeleteId] = useState('');
@@ -42,10 +39,7 @@ const TaskModalAttachment = () => {
   return (
     <>
       <Flex alignItems="center" mb="4">
-        <Icon as={MdDescription} color="gray" />
-        <Text ml="2" color="gray" fontSize="xs">
-          添付ファイル
-        </Text>
+        <SectionHeader icon={MdDescription}>添付ファイル</SectionHeader>
         <Button
           ml="2"
           leftIcon={<Icon as={MdAdd} />}
@@ -58,13 +52,13 @@ const TaskModalAttachment = () => {
         </Button>
       </Flex>
       <VStack alignItems="flex-start" spacing={4}>
-      {attachments.map(file => (
-        <Attachment
-          fileInfo={file}
-          onDownload={() => handleDownload('test')}
-          onDelete={() => handleDelete('test')}
-        />
-      ))}
+        {attachments.map((file) => (
+          <Attachment
+            fileInfo={file}
+            onDownload={() => handleDownload('test')}
+            onDelete={() => handleDelete('test')}
+          />
+        ))}
       </VStack>
       <Alert
         isOpen={!!deleteId}

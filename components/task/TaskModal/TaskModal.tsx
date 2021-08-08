@@ -16,13 +16,16 @@ import {
   Heading,
   Icon,
   VStack,
+  Spacer,
 } from '@chakra-ui/react';
 import { MdAccountCircle, MdImage, MdLabel, MdPeople } from 'react-icons/md';
 
 import Account from '../../Account';
 import TaskModalDescription from './TaskModalDescription';
 import TaskModalAttachment from './TaskModalAttachment';
+import TaskLabels from './TaskLabel/TaskLabel';
 import SearchImage from '../../popovers/SearchImage';
+import SectionHeader from '../../SectionHeader';
 
 type Props = {
   taskId: string;
@@ -85,10 +88,8 @@ const TaskModal: VFC<Props> = ({ taskId }) => {
             {/* モーダル右 */}
             <Box w="200px">
               <Box mb="6">
-                <Flex color="gray" alignItems="center" mb="4">
-                  <Icon as={MdAccountCircle} />
-                  <Text ml="2">その他</Text>
-                </Flex>
+                <SectionHeader icon={MdAccountCircle}>その他</SectionHeader>
+
                 <VStack alignItems="stretch" spacing="4">
                   <SearchImage onSelectImage={handleSelectImage}>
                     <Button
@@ -100,21 +101,23 @@ const TaskModal: VFC<Props> = ({ taskId }) => {
                       カバー画像
                     </Button>
                   </SearchImage>
-                  <Button
-                    colorScheme="gray"
-                    leftIcon={<Icon as={MdLabel} />}
-                    size="sm"
-                    justifyContent="flex-start"
-                  >
-                    ラベル
-                  </Button>
+                  <TaskLabels onSelect={() => {}}>
+                    <Button
+                      colorScheme="gray"
+                      leftIcon={<Icon as={MdLabel} />}
+                      size="sm"
+                      justifyContent="flex-start"
+                    >
+                      ラベル
+                    </Button>
+                  </TaskLabels>
                 </VStack>
               </Box>
               <Box>
-                <Flex color="gray" alignItems="center" mb="4">
-                  <Icon as={MdPeople} />
-                  <Text ml="2">担当</Text>
-                </Flex>
+                <SectionHeader icon={MdPeople}>
+                  担当
+                </SectionHeader>
+                <Spacer mb="2" />
                 <VStack spacing="2" alignItems="flex-start">
                   <Account>
                     <Text>test</Text>

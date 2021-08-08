@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { MdEdit, MdDescription } from 'react-icons/md';
+import SectionHeader from '../../SectionHeader';
 
 const TaskModalDescription = () => {
   const [isEditing, setEditing] = useBoolean();
@@ -20,10 +21,7 @@ const TaskModalDescription = () => {
   return (
     <>
       <Flex alignItems="center" mb="4">
-        <Icon as={MdDescription} color="gray" />
-        <Text ml="2" color="gray" fontSize="xs">
-          詳細
-        </Text>
+        <SectionHeader icon={MdDescription}>詳細</SectionHeader>
         {isEditing ? null : (
           <Button
             ml="2"

@@ -53,6 +53,7 @@ const boardTop = () => {
           minW="fit-content"
           leftIcon={<Icon as={MdMoreHoriz} />}
           onClick={onOpen}
+          bgColor=""
         >
           メニュー
         </Button>
