@@ -7,20 +7,24 @@ import {
   Text,
   VStack,
   Image,
-  useBoolean,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
 import { MdAdd, MdDescription } from 'react-icons/md';
 import Attachment from './Attachment';
 import Alert from '../../Alert';
 import SectionHeader from '../../SectionHeader';
+import FileUpload from './FileUpload';
 
 const attachments = [{}, {}, {}];
 
 const TaskModalAttachment = () => {
   const [deleteId, setDeleteId] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleAdd = () => {};
+  const handleAdd = () => {
+    onOpen();
+  };
 
   const handleDelete = (fileId: string) => {
     setDeleteId(fileId);
@@ -60,6 +64,11 @@ const TaskModalAttachment = () => {
           />
         ))}
       </VStack>
+
+      {/* 追加モーダル */}
+      <FileUpload isOpen={isOpen} onClose={onClose} />
+
+      {/* 削除モーダル */}
       <Alert
         isOpen={!!deleteId}
         onClose={() => setDeleteId('')}

@@ -49,7 +49,7 @@ const TaskLabel: VFC<PropsWithChildren<Props>> = ({ onSelect, children }) => {
   };
 
   return (
-    <Popover onClose={handleClose}>
+    <Popover onOpen={() => setLabelInput('')} onClose={handleClose}>
       <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
