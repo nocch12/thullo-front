@@ -1,4 +1,5 @@
 import Head from 'next/head';
+
 import withAuth from '../middleware/withAuth';
 
 const Home = () => {

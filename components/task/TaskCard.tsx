@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import {Icon} from '@chakra-ui/icons';
 import {
   AvatarGroup,
   Avatar,
@@ -12,7 +12,7 @@ import {
   WrapItem,
   Badge,
 } from '@chakra-ui/react';
-import {Icon} from '@chakra-ui/icons';
+import Link from 'next/link';
 import { MdAttachFile, MdComment } from 'react-icons/md';
 
 const TaskCard = () => {

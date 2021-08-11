@@ -1,3 +1,4 @@
+import { Icon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
@@ -7,9 +8,9 @@ import {
   EditableInput,
   EditablePreview,
 } from '@chakra-ui/react';
-import TaskCard from './TaskCard';
-import { Icon } from '@chakra-ui/icons';
 import { MdMoreHoriz } from 'react-icons/md';
+
+import TaskCard from './TaskCard';
 
 const TaskList = () => {
   const handleCancel = () => {

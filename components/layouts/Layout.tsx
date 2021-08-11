@@ -1,7 +1,8 @@
-import { VFC } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
-import Header from './Header';
+import { VFC } from 'react';
+
 import Footer from './Footer';
+import Header from './Header';
 
 type Props = {
   children: JSX.Element;

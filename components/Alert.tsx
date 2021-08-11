@@ -1,4 +1,3 @@
-import { VFC, useRef } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -11,6 +10,7 @@ import {
   Button,
   ButtonProps,
 } from '@chakra-ui/react';
+import { VFC, useRef } from 'react';
 
 type Props = {
   headerText: string;

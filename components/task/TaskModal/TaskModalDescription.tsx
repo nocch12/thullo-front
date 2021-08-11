@@ -1,4 +1,4 @@
-import React from 'react';
+import { Icon } from '@chakra-ui/icons';
 import {
   ButtonGroup,
   Button,
@@ -8,8 +8,9 @@ import {
   Textarea,
   useBoolean,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import React from 'react';
 import { MdEdit, MdDescription } from 'react-icons/md';
+
 import SectionHeader from '../../SectionHeader';
 
 const TaskModalDescription = () => {

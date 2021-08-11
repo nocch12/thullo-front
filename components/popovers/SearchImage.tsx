@@ -1,4 +1,3 @@
-import { VFC, PropsWithChildren, useState, useCallback } from 'react';
 import {
   Popover,
   PopoverTrigger,
@@ -14,8 +13,10 @@ import {
   Spacer,
   Box,
 } from '@chakra-ui/react';
-import SearchInput from '../forms/SearchInput';
+import { VFC, PropsWithChildren, useState, useCallback } from 'react';
+
 import { searchImage as searchImageAPI, TPixabayImage } from '../../api/image';
+import SearchInput from '../forms/SearchInput';
 
 type Props = {
   onSelectImage: (url: string) => void;

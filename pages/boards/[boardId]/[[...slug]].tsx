@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { Icon } from '@chakra-ui/icons';
 import {
   Container,
   HStack,
@@ -8,19 +7,36 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { VFC, useState, useEffect, useCallback } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
-import PublicityButton from '../../../components/board/PublicityButton';
 
-import BoardMembers from '../../../components/board/BoardMembers';
+import { getBoardDetail, updateBoardPublished } from '../../../api/board';
 import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
+import BoardMembers from '../../../components/board/BoardMembers';
+import PublicityButton from '../../../components/board/PublicityButton';
 import TaskList from '../../../components/task/TaskList';
 import TaskModal from '../../../components/task/TaskModal/TaskModal';
+import { Board } from '../../../types/board';
 
-const boardTop = () => {
+const boardTop: VFC = () => {
   const [taskId, setTaskId] = useState('');
+  const [board, setBoard] = useState<Board>(null);
   const { query } = useRouter();
   const { boardId, slug } = query;
+
+  useEffect(() => {
+    const getDetail = async () => {
+      try {
+        const res = await getBoardDetail(Number(boardId));
+        setBoard(res.data);
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    };
+    getDetail();
+  }, [boardId]);
 
   useEffect(() => {
     if (Array.isArray(slug)) {
@@ -30,7 +46,18 @@ const boardTop = () => {
     }
   }, [slug]);
 
-  const handleChangePublicity = () => {};
+  const handleChangePublicity = useCallback(async () => {
+    try {
+      const id = Number(boardId);
+      const res = await updateBoardPublished(id, !board?.published);
+
+      setBoard(res.data);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }, [boardId, board?.published]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -43,7 +70,7 @@ const boardTop = () => {
       <Flex alignItems="center" mb="4">
         <PublicityButton
           mr="2"
-          isPublic={false}
+          isPublic={board?.published}
           onClick={handleChangePublicity}
         />
         <BoardMembers />

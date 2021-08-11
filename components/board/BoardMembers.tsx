@@ -10,8 +10,9 @@ const BoardMembers = () => {
     >
       {Array(20)
         .fill(1)
-        .map((item) => (
+        .map((item, i) => (
           <Avatar
+            key={i}
             size="sm"
             name="Oshigaki Kisame"
             src="https://bit.ly/broken-link"

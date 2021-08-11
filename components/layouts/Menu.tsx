@@ -1,5 +1,4 @@
-import { VFC } from 'react';
-import NextLink from 'next/link';
+import { Icon } from '@chakra-ui/icons';
 import {
   IconButton,
   Menu,
@@ -8,7 +7,8 @@ import {
   MenuItem,
   MenuItemProps,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import NextLink from 'next/link';
+import { VFC } from 'react';
 import { MdMenu } from 'react-icons/md';
 
 import useUser from '../../hooks/useUser';

@@ -1,6 +1,7 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userState, authInitState } from '../store/auth/authState';
+
 import { getMe } from '../api/user';
+import { userState, authInitState } from '../store/auth/authState';
 
 const useUser = () => {
   const [user, setUser] = useRecoilState(userState);

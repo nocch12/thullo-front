@@ -1,6 +1,7 @@
-import { VFC, PropsWithChildren } from 'react';
 import { Badge, Icon } from '@chakra-ui/react';
+import { VFC, PropsWithChildren } from 'react';
 import { MdClose } from 'react-icons/md';
+
 import { LabelColorList } from '../../../../config/colors';
 
 type Props = {

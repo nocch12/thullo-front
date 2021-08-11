@@ -1,3 +1,4 @@
+import { Icon } from '@chakra-ui/icons';
 import {
   Flex,
   Box,
@@ -7,7 +8,6 @@ import {
   Textarea,
   useBoolean,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
 import { MdDescription, MdEdit } from 'react-icons/md';
 
 const BoardDrawerDescriotionSection = () => {

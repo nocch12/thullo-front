@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 
 type User = undefined | null | {
+  id: number;
   name: string;
 };
 

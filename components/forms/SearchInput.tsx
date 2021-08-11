@@ -1,11 +1,11 @@
-import { FormEvent, VFC, ChangeEvent } from 'react';
+import { Icon } from '@chakra-ui/icons';
 import {
   IconButton,
   InputGroup,
   Input,
   InputRightElement,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import { FormEvent, VFC, ChangeEvent } from 'react';
 import { MdSearch } from 'react-icons/md';
 
 type Props = {

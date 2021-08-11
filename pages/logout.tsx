@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 import { logout as logoutApi } from '../api/user';
 import useUser from '../hooks/useUser';
 

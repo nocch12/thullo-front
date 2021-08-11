@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
 import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
-import useRegister from '../hooks/useRegister';
+import React, { useState } from 'react';
+
 import withoutAuth from '..//middleware/withoutAuth';
+import useRegister from '../hooks/useRegister';
 
 const Register: React.VFC = () => {
   const { register, error } = useRegister();

@@ -1,11 +1,4 @@
 import {
-  VFC,
-  PropsWithChildren,
-  useState,
-  useCallback,
-  ChangeEvent,
-} from 'react';
-import {
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -23,16 +16,24 @@ import {
   Wrap,
   WrapItem,
   Badge,
-  Icon
+  Icon,
 } from '@chakra-ui/react';
+import {
+  VFC,
+  PropsWithChildren,
+  useState,
+  useCallback,
+  ChangeEvent,
+} from 'react';
 import { MdLabel, MdClose } from 'react-icons/md';
 
 import { labelColors } from '../../../../config/colors';
 import SectionHeader from '../../../SectionHeader';
+
 import TaskLabelBadge from './TaskLabelBadge';
 
 type Props = {
-  onSelect: (url: string) => void;
+  onSelect: (key: string) => void;
 };
 
 const TaskLabel: VFC<PropsWithChildren<Props>> = ({ onSelect, children }) => {
@@ -41,8 +42,6 @@ const TaskLabel: VFC<PropsWithChildren<Props>> = ({ onSelect, children }) => {
   const handleClose = () => {
     console.log('TaskLabels Closed.');
   };
-
-  const onSearch = async (value: string) => {};
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setLabelInput(e.target.value);
@@ -67,8 +66,16 @@ const TaskLabel: VFC<PropsWithChildren<Props>> = ({ onSelect, children }) => {
           />
           <Spacer mb="2" />
           <SimpleGrid columns={4} spacing="2">
-            {labelColors.map((c) => (
-              <Button colorScheme={c} w="full" h="6" rounded="md" isTruncated />
+            {Object.keys(labelColors).map((key) => (
+              <Button
+                key={key}
+                colorScheme={labelColors[key]}
+                w="full"
+                h="6"
+                rounded="md"
+                isTruncated
+                onClick={() => onSelect(key)}
+              />
             ))}
           </SimpleGrid>
           <Spacer mb="2" />
@@ -82,7 +89,6 @@ const TaskLabel: VFC<PropsWithChildren<Props>> = ({ onSelect, children }) => {
                 </TaskLabelBadge>
               </WrapItem>
             </Wrap>
-
           </Box>
         </PopoverBody>
       </PopoverContent>

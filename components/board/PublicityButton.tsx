@@ -1,6 +1,6 @@
-import { MouseEvent, VFC } from 'react';
-import { Button, ButtonProps } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
+import { Button, ButtonProps } from '@chakra-ui/react';
+import { MouseEvent, VFC } from 'react';
 import { MdLockOutline, MdLockOpen } from 'react-icons/md';
 
 type OnClick = (e: MouseEvent) => void;

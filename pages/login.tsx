@@ -1,9 +1,9 @@
+import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { Box, Button, Container, Input, Text } from '@chakra-ui/react';
-import useLogin from '../hooks/useLogin';
 
 import withoutAuth from '..//middleware/withoutAuth';
+import useLogin from '../hooks/useLogin';
 
 const Login: React.VFC = () => {
   const { login, error } = useLogin();

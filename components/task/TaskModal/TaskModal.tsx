@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-import { VFC } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -18,14 +16,18 @@ import {
   VStack,
   Spacer,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { VFC } from 'react';
 import { MdAccountCircle, MdImage, MdLabel, MdPeople } from 'react-icons/md';
 
 import Account from '../../Account';
-import TaskModalDescription from './TaskModalDescription';
-import TaskModalAttachment from './TaskModalAttachment';
-import TaskLabels from './TaskLabel/TaskLabel';
-import SearchImage from '../../popovers/SearchImage';
 import SectionHeader from '../../SectionHeader';
+import SearchImage from '../../popovers/SearchImage';
+
+import TaskLabels from './TaskLabel/TaskLabel';
+import TaskModalAttachment from './TaskModalAttachment';
+import TaskModalDescription from './TaskModalDescription';
+
 
 type Props = {
   taskId: string;

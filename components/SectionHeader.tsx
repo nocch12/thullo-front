@@ -1,5 +1,5 @@
-import { VFC, PropsWithChildren } from 'react';
 import { Flex, Icon, Text } from '@chakra-ui/react';
+import { VFC, PropsWithChildren } from 'react';
 import { IconType } from 'react-icons';
 
 type Props = PropsWithChildren<{

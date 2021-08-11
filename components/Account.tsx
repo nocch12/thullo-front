@@ -1,5 +1,5 @@
-import { VFC } from 'react';
 import { Flex, Avatar, Box, AvatarProps } from '@chakra-ui/react';
+import { VFC } from 'react';
 
 const Account: VFC<AvatarProps> = ({ children, ...props }) => {
   return (

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import useUser from './useUser';
+
 import { register as registerApi } from '../api/user';
+
+import useUser from './useUser';
 
 const useRegister = () => {
   const [error, setError] = useState<unknown>(null);

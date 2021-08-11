@@ -1,4 +1,3 @@
-import { VFC } from 'react';
 import {
   Box,
   ButtonGroup,
@@ -8,9 +7,10 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
+import { VFC } from 'react';
 
 type TAttachment = {
-  fileInfo: {};
+  fileInfo: { id: string };
   onDownload: () => void;
   onDelete: () => void;
 };

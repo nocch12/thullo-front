@@ -1,4 +1,3 @@
-import { VFC, useRef, useState, useCallback, ChangeEvent } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -9,10 +8,10 @@ import {
   AlertDialogOverlay,
   AlertDialogProps,
   Button,
-  FormControl,
   Box,
   Input,
 } from '@chakra-ui/react';
+import { VFC, useRef, useCallback, ChangeEvent } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 type Props = {
@@ -27,7 +26,7 @@ const FileUpload: VFC<Props> = ({ onClose, isOpen }) => {
   const onDrop = useCallback((acceptedFiles) => {
     handleUpload(acceptedFiles[0] as File);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   // クリックからアップロード
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {

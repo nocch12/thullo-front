@@ -1,5 +1,6 @@
-import { VFC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { VFC, useState, useEffect } from 'react';
+
 import useUser from '../hooks/useUser';
 
 const withAuth = (Component: VFC) => {

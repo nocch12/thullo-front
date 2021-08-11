@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import useUser from './useUser';
+
 import { login as loginApi } from '../api/user';
+
+import useUser from './useUser';
 
 const useLogin = () => {
   const [error, setError] = useState<unknown>(null);

@@ -1,7 +1,8 @@
-import { VFC } from 'react';
-import { Flex, Text, Table, Tbody, Tr, Td, Button } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/icons';
+import { Flex, Text, Table, Tbody, Tr, Td, Button } from '@chakra-ui/react';
+import { VFC } from 'react';
 import { MdDescription } from 'react-icons/md';
+
 import Account from '../../Account';
 
 type TMemberTr = {

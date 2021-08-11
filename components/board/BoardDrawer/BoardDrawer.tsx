@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { Icon } from '@chakra-ui/icons';
 import {
   Flex,
   Box,
@@ -10,9 +10,11 @@ import {
   DrawerCloseButton,
   Text,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import { VFC } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
+
 import Account from '../../Account';
+
 import BoardDrawerDescriotionSection from './BoardDrawerDescriotionSection';
 import BoardDrawerMemberSection from './BoardDrawerMemberSection';
 

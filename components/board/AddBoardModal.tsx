@@ -1,4 +1,4 @@
-import { VFC, useState, ChangeEvent } from 'react';
+import { Icon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
@@ -15,11 +15,13 @@ import {
   Image,
   Spacer,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/icons';
+import { VFC, useState, ChangeEvent } from 'react';
 import { MdAdd, MdImage } from 'react-icons/md';
-import PublicityButton from './PublicityButton';
-import SearchImage from '../popovers/SearchImage';
+
 import { addBoard } from '../../api/board';
+import SearchImage from '../popovers/SearchImage';
+
+import PublicityButton from './PublicityButton';
 
 type Props = Partial<UseDisclosureReturn> & {
   onAdded?: () => void;
@@ -46,7 +48,10 @@ const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
 
       onClose();
       onAdded();
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   };
 
   const handleClose = () => {
@@ -87,7 +92,7 @@ const AddBoardModal: VFC<Props> = ({ isOpen, onClose, onAdded }) => {
                   flexGrow={1}
                   size="sm"
                 >
-                  Cover
+                  カバー画像
                 </Button>
               </SearchImage>
               <Spacer />
