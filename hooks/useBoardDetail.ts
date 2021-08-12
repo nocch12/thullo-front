@@ -1,9 +1,10 @@
 import {
   getBoardDetail as getApi,
+  updateBoard as updateApi,
   updateBoardPublished as upPublishedApi,
 } from '../api/board';
 import { boardState, boardUserState } from '../store/board';
-import { Board } from '../types/board';
+import { Board, UpdateParams } from '../types/board';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 
@@ -26,12 +27,10 @@ const useBoardDetail = () => {
     }
   };
 
-  const togglePublished = async () => {
+  const updateBoard = async (params: UpdateParams) => {
     setLoading(true);
-    console.log(boardDetail);
-
     try {
-      const res = await upPublishedApi(boardDetail.id, !boardDetail.published);
+      const res = await updateApi(boardDetail.id, params);
       setBoardDetail(res.data);
     } catch (e) {
       console.log(e);
@@ -41,7 +40,32 @@ const useBoardDetail = () => {
     }
   };
 
-  return { loading, boardDetail, boardUsers, getBoardDetail, togglePublished };
+  // const togglePublished = async () => {
+  //   setLoading(true);
+  //   console.log(boardDetail);
+
+  //   try {
+  //     const res = await upPublishedApi(boardDetail.id, !boardDetail.published);
+  //     setBoardDetail(res.data);
+  //   } catch (e) {
+  //     console.log(e);
+  //     throw e;
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const togglePublished = async () => {
+    await updateBoard({ published: !boardDetail.published });
+  };
+
+  return {
+    loading,
+    boardDetail,
+    boardUsers,
+    getBoardDetail,
+    updateBoard,
+    togglePublished,
+  };
 };
 
 export default useBoardDetail;

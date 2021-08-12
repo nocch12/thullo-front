@@ -1,5 +1,5 @@
 import { axios } from '../libs/axios';
-import { Board } from '../types/board';
+import { Board, UpdateParams } from '../types/board';
 
 export const searchBoard = (q = '') => {
   return axios.get<Board[]>('/board', {
@@ -22,6 +22,16 @@ export const addBoard = async (
     boardName,
     imagePath,
     published,
+  });
+};
+
+export const updateBoard = async (
+  boardId: number,
+  params: UpdateParams = {}
+) => {
+  return axios.patch<Board>('/board', {
+    boardId,
+    ...params,
   });
 };
 

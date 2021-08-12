@@ -2,7 +2,7 @@ export type BoardUser = {
   id: number;
   name?: string;
   imagePath?: string;
-}
+};
 
 export type Board = {
   id: number;
@@ -13,4 +13,8 @@ export type Board = {
   createdAt: string;
   updatedAt: string;
   users: BoardUser[];
-}
+};
+
+export type UpdateParams = Partial<
+  Pick<Board, 'boardName' | 'description' | 'published'>
+>;

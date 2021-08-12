@@ -1,3 +1,7 @@
+import useBoardDetail from '../../../hooks/useBoardDetail';
+import Account from '../../Account';
+import BoardDrawerDescriotionSection from './BoardDrawerDescriotionSection';
+import BoardDrawerMemberSection from './BoardDrawerMemberSection';
 import { Icon } from '@chakra-ui/icons';
 import {
   Flex,
@@ -13,24 +17,21 @@ import {
 import { VFC } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 
-import Account from '../../Account';
-
-import BoardDrawerDescriotionSection from './BoardDrawerDescriotionSection';
-import BoardDrawerMemberSection from './BoardDrawerMemberSection';
-
 type Props = {
   isOpen: boolean;
   onClose(): void;
 };
 
 const BoardDrawer: VFC<Props> = ({ isOpen, onClose }) => {
+  const { boardDetail } = useBoardDetail();
+
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader px="4" fontSize="md" shadow="sm">
-          ボード名
+          {boardDetail?.boardName}
         </DrawerHeader>
 
         <DrawerBody px="4">
@@ -43,9 +44,9 @@ const BoardDrawer: VFC<Props> = ({ isOpen, onClose }) => {
             </Flex>
             <Box>
               <Account>
-                <Text>test</Text>
-                <Text fontSize="xs" color="gray">
-                  2021/08/21
+                <Text>{boardDetail?.createdAt}</Text>
+                <Text as="time" fontSize="xs" color="gray">
+                  {boardDetail?.createdAt}
                 </Text>
               </Account>
             </Box>
