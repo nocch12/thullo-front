@@ -1,6 +1,12 @@
-import { Container, HStack, Flex, Box, Avatar } from '@chakra-ui/react';
+import { TSimpleUser } from '../../types/user';
+import { HStack, Avatar } from '@chakra-ui/react';
+import { VFC } from 'react';
 
-const BoardMembers = () => {
+type Props = {
+  users: TSimpleUser[];
+};
+
+const BoardMembers: VFC<Props> = ({ users }) => {
   return (
     <HStack
       overflowX="auto"
@@ -8,16 +14,9 @@ const BoardMembers = () => {
         '&::-webkit-scrollbar': { display: 'none' },
       }}
     >
-      {Array(20)
-        .fill(1)
-        .map((item, i) => (
-          <Avatar
-            key={i}
-            size="sm"
-            name="Oshigaki Kisame"
-            src="https://bit.ly/broken-link"
-          />
-        ))}
+      {users?.map((u) => (
+        <Avatar key={u.id} size="sm" name={u.name} src={u.imagePath || null} />
+      ))}
     </HStack>
   );
 };

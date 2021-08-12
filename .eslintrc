@@ -36,13 +36,6 @@
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0,
     "no-empty-function": 0,
-    "@typescript-eslint/ban-ts-comment": 0,
-    "import/order": [
-      "warn",
-      {
-        "alphabetize": { "order": "asc" },
-        "newlines-between": "always"
-      }
-    ]
+    "@typescript-eslint/ban-ts-comment": 0
   }
 }

@@ -1,3 +1,9 @@
+import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
+import BoardMembers from '../../../components/board/BoardMembers';
+import PublicityButton from '../../../components/board/PublicityButton';
+import TaskList from '../../../components/task/TaskList';
+import TaskModal from '../../../components/task/TaskModal/TaskModal';
+import useBoardDetail from '../../../hooks/useBoardDetail';
 import { Icon } from '@chakra-ui/icons';
 import {
   Container,
@@ -6,38 +12,25 @@ import {
   Box,
   Button,
   useDisclosure,
+  Spacer,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { VFC, useState, useEffect, useCallback } from 'react';
+import { VFC, useState, useEffect } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
-
-import { getBoardDetail, updateBoardPublished } from '../../../api/board';
-import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
-import BoardMembers from '../../../components/board/BoardMembers';
-import PublicityButton from '../../../components/board/PublicityButton';
-import TaskList from '../../../components/task/TaskList';
-import TaskModal from '../../../components/task/TaskModal/TaskModal';
-import { Board } from '../../../types/board';
 
 const boardTop: VFC = () => {
   const [taskId, setTaskId] = useState('');
-  const [board, setBoard] = useState<Board>(null);
+  const { boardDetail, getBoardDetail, boardUsers, togglePublished, loading } =
+    useBoardDetail();
   const { query } = useRouter();
   const { boardId, slug } = query;
 
+  // 詳細情報取得
   useEffect(() => {
-    const getDetail = async () => {
-      try {
-        const res = await getBoardDetail(Number(boardId));
-        setBoard(res.data);
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
-    };
-    getDetail();
+    getBoardDetail(Number(boardId));
   }, [boardId]);
 
+  // タスクモーダル展開
   useEffect(() => {
     if (Array.isArray(slug)) {
       setTaskId(slug[0]);
@@ -46,17 +39,15 @@ const boardTop: VFC = () => {
     }
   }, [slug]);
 
-  const handleChangePublicity = useCallback(async () => {
+  // 公開非公開設定
+  const handleChangePublicity = async () => {
     try {
-      const id = Number(boardId);
-      const res = await updateBoardPublished(id, !board?.published);
-
-      setBoard(res.data);
+      togglePublished();
     } catch (e) {
       console.log(e);
       throw e;
     }
-  }, [boardId, board?.published]);
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -70,10 +61,12 @@ const boardTop: VFC = () => {
       <Flex alignItems="center" mb="4">
         <PublicityButton
           mr="2"
-          isPublic={board?.published}
+          isPublic={boardDetail?.published}
+          isLoading={loading}
           onClick={handleChangePublicity}
         />
-        <BoardMembers />
+        <BoardMembers users={boardUsers} />
+        <Spacer />
         <Button
           ml="2"
           size="sm"
