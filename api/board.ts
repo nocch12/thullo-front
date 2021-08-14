@@ -40,9 +40,13 @@ export const updateBoard = async (
 };
 
 // ボードメンバー除外
-export const removeBoardUser = async (userId: BoardUser['id']) => {
-  return axios.delete<BoardUser[]>('/board/user', {
+export const removeBoardUser = async (
+  boardId: Board['id'],
+  userId: BoardUser['id']
+) => {
+  return axios.delete<BoardUser>('/board/user', {
     params: {
+      boardId,
       userId,
     },
   });

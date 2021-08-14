@@ -16,7 +16,6 @@ import {
   useBoolean,
   Spacer,
   Box,
-  MenuList,
   Checkbox,
   List,
   ListItem,
@@ -35,6 +34,8 @@ type Props = {
   inviting: boolean;
 };
 
+const CHECK_NAME = 'user-check';
+
 const SearchUserPopover: VFC<PropsWithChildren<Props>> = ({
   excludeUserIds,
   onInvite,
@@ -48,6 +49,9 @@ const SearchUserPopover: VFC<PropsWithChildren<Props>> = ({
 
   const handleClose = () => {
     console.log('SearchUsers Closed.');
+    handleCheck([]);
+    setSearchInput('');
+    setUsers([]);
   };
 
   const handleSearch = async (value: string) => {
@@ -64,7 +68,9 @@ const SearchUserPopover: VFC<PropsWithChildren<Props>> = ({
 
   const handleInvite = async () => {
     await onInvite(checked);
-    handleSearch(searchInput);
+    setUsers((prev) =>
+      prev.filter((user) => !checked.includes(user.id.toString()))
+    );
   };
 
   return (
@@ -85,18 +91,30 @@ const SearchUserPopover: VFC<PropsWithChildren<Props>> = ({
           <Box rounded="md" shadow="md">
             {searching ? (
               '検索中...'
+            ) : users.length === 0 ? (
+              '見つかりませんでした'
             ) : (
               <CheckboxGroup onChange={handleCheck} value={checked}>
                 <List py={2}>
                   {users.map((u) => (
-                    <ListItem w="full" p={2}>
-                      <Account name={u.name} src={u.imagePath}>
-                        <Flex alignItems="center">
-                          <Text>{u.name}</Text>
-                          <Spacer ml="1" flexGrow={1} />
-                          <Checkbox value={u.id.toString()} />
-                        </Flex>
-                      </Account>
+                    <ListItem w="full" key={u.id.toString()}>
+                      <Box
+                        as="label"
+                        htmlFor={CHECK_NAME + u.id}
+                        p={2}
+                        display="block"
+                      >
+                        <Account as="label" name={u.name} src={u.imagePath}>
+                          <Flex alignItems="center">
+                            <Text>{u.name}</Text>
+                            <Spacer ml="1" flexGrow={1} />
+                            <Checkbox
+                              id={CHECK_NAME + u.id}
+                              value={u.id.toString()}
+                            />
+                          </Flex>
+                        </Account>
+                      </Box>
                     </ListItem>
                   ))}
                 </List>

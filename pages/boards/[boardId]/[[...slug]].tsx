@@ -1,4 +1,3 @@
-import { inviteBoardUser } from '../../../api/board';
 import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
 import BoardMembers from '../../../components/board/BoardMembers';
 import PublicityButton from '../../../components/board/PublicityButton';

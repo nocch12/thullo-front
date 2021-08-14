@@ -49,7 +49,7 @@ const useBoardDetail = () => {
   const removeUser = async (id: BoardUser['id']) => {
     setLoading(true);
     try {
-      await removeBoardUserApi(id);
+      await removeBoardUserApi(boardDetail.id, id);
       setBoardUsers((prev) => {
         return prev.filter((u) => u.id !== id);
       });
