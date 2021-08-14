@@ -1,3 +1,5 @@
+import { searchImage as searchImageAPI, TPixabayImage } from '../../api/image';
+import SearchInput from '../forms/SearchInput';
 import {
   Popover,
   PopoverTrigger,
@@ -13,16 +15,16 @@ import {
   Spacer,
   Box,
 } from '@chakra-ui/react';
-import { VFC, PropsWithChildren, useState, useCallback } from 'react';
-
-import { searchImage as searchImageAPI, TPixabayImage } from '../../api/image';
-import SearchInput from '../forms/SearchInput';
+import { VFC, PropsWithChildren, useState } from 'react';
 
 type Props = {
   onSelectImage: (url: string) => void;
 };
 
-const SearchImage: VFC<PropsWithChildren<Props>> = ({ onSelectImage, children }) => {
+const SearchImage: VFC<PropsWithChildren<Props>> = ({
+  onSelectImage,
+  children,
+}) => {
   const [images, setImages] = useState<TPixabayImage[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useBoolean();
@@ -47,7 +49,11 @@ const SearchImage: VFC<PropsWithChildren<Props>> = ({ onSelectImage, children })
         <PopoverHeader>Cover</PopoverHeader>
         <PopoverBody>
           <Text mb="2">Unsplashから画像を検索</Text>
-          <SearchInput value={searchInput} onChange={setSearchInput} onSearch={onSearch} />
+          <SearchInput
+            value={searchInput}
+            onChange={setSearchInput}
+            onSearch={onSearch}
+          />
           <Spacer mb="2" />
           {searching ? (
             '検索中...'

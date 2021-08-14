@@ -5,7 +5,7 @@ const Account: VFC<AvatarProps> = ({ children, ...props }) => {
   return (
     <Flex alignItems="center">
       <Avatar mr="2" {...props} size="sm" />
-      <Box>{children}</Box>
+      <Box flexGrow={1}>{children}</Box>
     </Flex>
   );
 };

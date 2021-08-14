@@ -1,6 +1,8 @@
+import { inviteBoardUser } from '../../../api/board';
 import BoardDrawer from '../../../components/board/BoardDrawer/BoardDrawer';
 import BoardMembers from '../../../components/board/BoardMembers';
 import PublicityButton from '../../../components/board/PublicityButton';
+import SearchUserPopover from '../../../components/popovers/SearchUserPopover';
 import TaskList from '../../../components/task/TaskList';
 import TaskModal from '../../../components/task/TaskModal/TaskModal';
 import useBoardDetail from '../../../hooks/useBoardDetail';
@@ -13,15 +15,24 @@ import {
   Button,
   useDisclosure,
   Spacer,
+  IconButton,
 } from '@chakra-ui/react';
+import { StringOrNumber } from '@chakra-ui/utils';
 import { useRouter } from 'next/router';
 import { VFC, useState, useEffect } from 'react';
-import { MdMoreHoriz } from 'react-icons/md';
+import { MdAdd, MdMoreHoriz } from 'react-icons/md';
 
 const boardTop: VFC = () => {
   const [taskId, setTaskId] = useState('');
-  const { boardDetail, getBoardDetail, boardUsers, togglePublished, loading } =
-    useBoardDetail();
+  const {
+    boardDetail,
+    getBoardDetail,
+    boardUsers,
+    boardUserIds,
+    addUsers,
+    togglePublished,
+    loading,
+  } = useBoardDetail();
   const { query } = useRouter();
   const { boardId, slug } = query;
 
@@ -49,6 +60,12 @@ const boardTop: VFC = () => {
     }
   };
 
+  // メンバー招待
+  const inviteUser = async (checked: StringOrNumber[]) => {
+    const res = await addUsers(checked.map((c) => Number(c)));
+    return res;
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -66,6 +83,19 @@ const boardTop: VFC = () => {
           onClick={handleChangePublicity}
         />
         <BoardMembers users={boardUsers} />
+        <SearchUserPopover
+          onInvite={inviteUser}
+          inviting={loading}
+          excludeUserIds={boardUserIds}
+        >
+          <IconButton
+            aria-label="join user"
+            icon={<MdAdd />}
+            colorScheme="teal"
+            size="sm"
+            ml={2}
+          />
+        </SearchUserPopover>
         <Spacer />
         <Button
           ml="2"

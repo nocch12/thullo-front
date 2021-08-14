@@ -15,28 +15,39 @@ import { MdDescription, MdEdit } from 'react-icons/md';
 const BoardDrawerDescriotionSection = () => {
   const [isEditing, setEditing] = useBoolean();
   const [localDesc, setLocalDesc] = useState('');
-  const { boardDetail } = useBoardDetail();
+  const { boardDetail, updateBoard, loading } = useBoardDetail();
 
   useEffect(() => {
     setLocalDesc(boardDetail.description);
   }, [boardDetail.description]);
 
+  // 入力キャンセル
   const handleCancel = () => {
     setLocalDesc(boardDetail.description);
     setEditing.off();
   };
 
-  const handleKeySubmit = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  // キーボードで保存
+  const handleKeySubmit = async (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.ctrlKey && e.key === 'Enter') {
       e.preventDefault();
+      await handleUpdate();
       setEditing.off();
     }
   };
 
-  const handleClickSubmit = () => {
+  // 保存ボタン
+  const handleClickSubmit = async () => {
+    await handleUpdate();
     setEditing.off();
   };
 
+  // 更新実処理
+  const handleUpdate = async () => {
+    return await updateBoard({ description: localDesc });
+  };
+
+  // 入力ハンドラ
   const handleChangeDesc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setLocalDesc(e.target.value);
   };
@@ -72,7 +83,12 @@ const BoardDrawerDescriotionSection = () => {
             <Button size="xs" onClick={handleCancel}>
               キャンセル
             </Button>
-            <Button size="xs" colorScheme="teal" onClick={handleClickSubmit}>
+            <Button
+              size="xs"
+              colorScheme="teal"
+              onClick={handleClickSubmit}
+              isLoading={loading}
+            >
               保存
             </Button>
           </ButtonGroup>

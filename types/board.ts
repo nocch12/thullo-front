@@ -13,6 +13,7 @@ export type Board = {
   createdAt: string;
   updatedAt: string;
   users: BoardUser[];
+  author: BoardUser;
 };
 
 export type UpdateParams = Partial<

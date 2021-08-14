@@ -1,20 +1,29 @@
+import useBoardDetail from '../../../hooks/useBoardDetail';
+import Account from '../../Account';
 import { Icon } from '@chakra-ui/icons';
 import { Flex, Text, Table, Tbody, Tr, Td, Button } from '@chakra-ui/react';
 import { VFC } from 'react';
 import { MdDescription } from 'react-icons/md';
 
-import Account from '../../Account';
-
 type TMemberTr = {
+  imagePath?: string;
   memberName: string;
   isAdmin: unknown;
+  onRemove: () => void;
+  loading: boolean;
 };
 
-const MemberTr: VFC<TMemberTr> = ({ memberName, isAdmin }) => {
+const MemberTr: VFC<TMemberTr> = ({
+  imagePath,
+  memberName,
+  isAdmin,
+  onRemove,
+  loading,
+}) => {
   return (
     <Tr>
       <Td pl="0" w="full">
-        <Account>
+        <Account name={memberName} src={imagePath}>
           <Text>{memberName}</Text>
         </Account>
       </Td>
@@ -24,7 +33,13 @@ const MemberTr: VFC<TMemberTr> = ({ memberName, isAdmin }) => {
             admin
           </Text>
         ) : (
-          <Button size="xs" colorScheme="red" variant="outline">
+          <Button
+            size="xs"
+            colorScheme="red"
+            variant="outline"
+            onClick={onRemove}
+            isLoading={loading}
+          >
             remove
           </Button>
         )}
@@ -34,6 +49,12 @@ const MemberTr: VFC<TMemberTr> = ({ memberName, isAdmin }) => {
 };
 
 const BoardDrawerMemberSection: VFC = () => {
+  const { boardDetail, boardUsers, removeUser, loading } = useBoardDetail();
+
+  const handleRemove = async (id: number) => {
+    await removeUser(id);
+  };
+
   return (
     <>
       <Flex alignItems="center" mb="4">
@@ -44,10 +65,19 @@ const BoardDrawerMemberSection: VFC = () => {
       </Flex>
       <Table size="sm" variant="unstyled">
         <Tbody>
-          <MemberTr memberName="tests" isAdmin={true} />
+          {boardUsers.map((u) => (
+            <MemberTr
+              memberName={u.name}
+              imagePath={u.imagePath}
+              isAdmin={u.id === boardDetail?.author?.id}
+              loading={loading}
+              onRemove={() => handleRemove(u.id)}
+            />
+          ))}
+          {/* <MemberTr memberName="tests" isAdmin={true} />
           <MemberTr memberName="tests" isAdmin={false} />
           <MemberTr memberName="tests" isAdmin={false} />
-          <MemberTr memberName="tests" isAdmin={false} />
+          <MemberTr memberName="tests" isAdmin={false} /> */}
         </Tbody>
       </Table>
     </>

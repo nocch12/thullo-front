@@ -1,11 +1,12 @@
 import { axios } from '../libs/axios';
+import { TSimpleUser } from '../types/user';
 
 export type TUser = {
   id: number;
   email: string;
   name: string;
   gid?: string;
-}
+};
 
 export const register = (email: string, password: string) => {
   return axios.post<{ user: TUser }>('/user/register', {
@@ -27,4 +28,10 @@ export const getMe = () => {
 
 export const logout = () => {
   return axios.get('/user/logout');
+};
+
+export const searchUser = (q: string, excludeIds: TSimpleUser['id'][]) => {
+  return axios.get<TSimpleUser[]>('/user', {
+    params: { q, excludeIds },
+  });
 };

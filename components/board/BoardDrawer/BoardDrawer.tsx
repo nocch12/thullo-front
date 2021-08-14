@@ -43,8 +43,11 @@ const BoardDrawer: VFC<Props> = ({ isOpen, onClose }) => {
               </Text>
             </Flex>
             <Box>
-              <Account>
-                <Text>{boardDetail?.createdAt}</Text>
+              <Account
+                name={boardDetail?.author?.name}
+                src={boardDetail?.author?.imagePath}
+              >
+                <Text>{boardDetail?.author?.name}</Text>
                 <Text as="time" fontSize="xs" color="gray">
                   {boardDetail?.createdAt}
                 </Text>
