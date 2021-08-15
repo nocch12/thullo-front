@@ -2,10 +2,10 @@ import { axios } from '../libs/axios';
 import { Board, BoardUser, UpdateParams } from '../types/board';
 
 // ボード一覧取得
-export const searchBoard = (q = '') => {
+export const searchBoard = (search?: string | undefined) => {
   return axios.get<Board[]>('/board', {
     params: {
-      q,
+      search,
     },
   });
 };

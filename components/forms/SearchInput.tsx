@@ -10,11 +10,17 @@ import { MdSearch } from 'react-icons/md';
 
 type Props = {
   value: string;
+  placeHolder?: string;
   onChange: (value: string) => void;
   onSearch: (value: string) => void;
 };
 
-const SearchInput: VFC<Props> = ({ value, onChange, onSearch }) => {
+const SearchInput: VFC<Props> = ({
+  value,
+  placeHolder,
+  onChange,
+  onSearch,
+}) => {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSearch(value);
@@ -28,19 +34,16 @@ const SearchInput: VFC<Props> = ({ value, onChange, onSearch }) => {
     <InputGroup as="form" size="sm" onSubmit={onSubmit}>
       <Input
         type="text"
-        placeholder="search image..."
+        placeholder={placeHolder ? placeHolder : '検索...'}
         value={value}
         size="sm"
+        rounded="md"
+        shadow="md"
+        enterKeyHint="search"
         onChange={onInput}
       />
       <InputRightElement>
-        <IconButton
-          aria-label="search"
-          icon={<Icon as={MdSearch} />}
-          type="submit"
-          size="xs"
-          colorScheme="teal"
-        />
+        <Icon as={MdSearch} />
       </InputRightElement>
     </InputGroup>
   );

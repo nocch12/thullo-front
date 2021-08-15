@@ -1,3 +1,8 @@
+import { searchBoard } from '../../api/board';
+import AddBoardModal from '../../components/board/AddBoardModal';
+import Board from '../../components/board/Board';
+import withAuth from '../../middleware/withAuth';
+import { Board as TBoard } from '../../types/board';
 import { Icon } from '@chakra-ui/icons';
 import {
   Box,
@@ -10,29 +15,30 @@ import {
   Spacer,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
-
-import { searchBoard } from '../../api/board';
-import AddBoardModal from '../../components/board/AddBoardModal';
-import Board from '../../components/board/Board';
-import withAuth from '../../middleware/withAuth';
-import { Board as TBoard } from '../../types/board';
 
 const index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [boards, setBoards] = useState<TBoard[]>([]);
+  const { query } = useRouter();
+  const searchWord = Array.isArray(query.search)
+    ? query.search[0]
+    : query.search;
+
+  const headingText = searchWord ? `検索: ${searchWord}` : '全てのボード';
 
   useEffect(() => {
     handleReload();
-  }, []);
+  }, [searchWord]);
 
   const handleReload = async () => {
     try {
-      const res = await searchBoard();
+      const res = await searchBoard(searchWord);
       setBoards(res.data);
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw e;
     }
   };
@@ -43,7 +49,7 @@ const index = () => {
 
       <Flex alignItems="center">
         <Heading as="h3" fontSize="md">
-          All Boards
+          {headingText}
         </Heading>
         <Spacer />
         <Button

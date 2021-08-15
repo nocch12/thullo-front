@@ -1,7 +1,8 @@
+import Error from 'next/error';
 import React from 'react';
 
-const _error = () => {
-  return <div>error</div>;
+const notFound = () => {
+  return <Error statusCode={500} title="予期せぬエラーが発生しました" />;
 };
 
-export default _error;
+export default notFound;

@@ -26,6 +26,7 @@ const boardTop: VFC = () => {
   const {
     boardDetail,
     getBoardDetail,
+    resetDetail,
     boardUsers,
     boardUserIds,
     addUsers,
@@ -39,6 +40,13 @@ const boardTop: VFC = () => {
   useEffect(() => {
     getBoardDetail(Number(boardId));
   }, [boardId]);
+
+  // 詳細情報リセット
+  useEffect(() => {
+    return () => {
+      resetDetail();
+    };
+  }, []);
 
   // タスクモーダル展開
   useEffect(() => {

@@ -80,12 +80,18 @@ const useBoardDetail = () => {
     await updateBoard({ published: !boardDetail.published });
   };
 
+  const resetDetail = () => {
+    setBoardDetail(null);
+    setBoardUsers([]);
+  };
+
   return {
     loading,
     boardDetail,
     boardUsers,
     boardUserIds,
     getBoardDetail,
+    resetDetail,
     updateBoard,
     togglePublished,
     removeUser,

@@ -1,9 +1,7 @@
-import { ChakraProvider } from '@chakra-ui/react';
-import { RecoilRoot } from 'recoil';
-
 import Layout from '../components/layouts/Layout';
 import Initialize from '../middleware/Initialize';
-
+import { ChakraProvider } from '@chakra-ui/react';
+import { RecoilRoot } from 'recoil';
 
 const MyApp = ({ Component, pageProps }) => {
   return (
