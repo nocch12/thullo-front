@@ -50,7 +50,7 @@ const HambergerMenu = () => {
         variant="outline"
         size="sm"
       />
-      <MenuList>{ifLoggedIn(UserMenu, GuestMenu)}</MenuList>
+      <MenuList zIndex={100}>{ifLoggedIn(UserMenu, GuestMenu)}</MenuList>
     </Menu>
   );
 };

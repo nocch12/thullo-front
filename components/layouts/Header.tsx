@@ -1,6 +1,6 @@
+import SearchBoard from '../forms/SearchBoard';
 import BoardArea from './BoardArea';
 import Menu from './Menu';
-import SearchBoard from './SearchBoard';
 import {
   Flex,
   Box,
@@ -9,7 +9,8 @@ import {
   HStack,
   IconButton,
 } from '@chakra-ui/react';
-import { MdApps } from 'react-icons/md';
+import Link from 'next/link';
+import { MdApps, MdSearch } from 'react-icons/md';
 
 const Header = () => {
   return (
@@ -25,7 +26,19 @@ const Header = () => {
             icon={<MdApps />}
             size="sm"
           />
-          <SearchBoard />
+          <Box display={['flex', null, 'none']}>
+            <Link href="/boards/search" passHref>
+              <IconButton
+                as="a"
+                aria-label="search board"
+                icon={<MdSearch />}
+                size="sm"
+              />
+            </Link>
+          </Box>
+          <Box display={['none', null, 'block']}>
+            <SearchBoard />
+          </Box>
           <Menu />
         </HStack>
       </Flex>
