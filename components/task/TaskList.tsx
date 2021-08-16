@@ -1,3 +1,4 @@
+import { TaskList } from '../../types/taskList';
 import TaskCard from './TaskCard';
 import { Icon } from '@chakra-ui/icons';
 import {
@@ -9,9 +10,14 @@ import {
   EditableInput,
   EditablePreview,
 } from '@chakra-ui/react';
+import { VFC } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
 
-const TaskList = () => {
+type Props = {
+  list: TaskList;
+};
+
+const TaskListComponent: VFC<Props> = ({ list }) => {
   const handleCancel = () => {
     console.log('cancel');
   };
@@ -23,7 +29,7 @@ const TaskList = () => {
     <Box w="full">
       <Flex alignItems="center" justify="space-between" mb="2">
         <Editable
-          defaultValue="heading"
+          defaultValue={list.listName}
           onCancel={handleCancel}
           onChange={handleChange}
           onSubmit={handleChange}
@@ -36,13 +42,12 @@ const TaskList = () => {
         <Icon as={MdMoreHoriz} />
       </Flex>
       <VStack spacing="2">
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
+        {list.Task.map((t) => (
+          <TaskCard key={t.id} boardId={list.boardId} task={t} />
+        ))}
       </VStack>
     </Box>
   );
 };
 
-export default TaskList;
+export default TaskListComponent;

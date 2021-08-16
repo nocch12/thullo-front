@@ -1,4 +1,6 @@
-import {Icon} from '@chakra-ui/icons';
+import { Board } from '../../types/board';
+import { Task } from '../../types/task';
+import { Icon } from '@chakra-ui/icons';
 import {
   AvatarGroup,
   Avatar,
@@ -13,9 +15,15 @@ import {
   Badge,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { VFC } from 'react';
 import { MdAttachFile, MdComment } from 'react-icons/md';
 
-const TaskCard = () => {
+type Props = {
+  boardId: Board['id'];
+  task: Task;
+};
+
+const TaskCard: VFC<Props> = ({ boardId, task }) => {
   return (
     <LinkBox p="2" w="full" shadow="sm" bg="white" rounded="md">
       {/* 画像 */}
@@ -28,10 +36,10 @@ const TaskCard = () => {
         mb="2"
       />
       {/* タイトル */}
-      <Link href="/boards/b/t" passHref>
+      <Link href={`/boards/${boardId}/${task.id}`} passHref>
         <LinkOverlay>
           <Text mb="2" fontWeight="bold">
-            title
+            {task.taskName}
           </Text>
         </LinkOverlay>
       </Link>
@@ -72,10 +80,10 @@ const TaskCard = () => {
         </Box>
         {/* コメント、ファイル */}
         <Flex justify="flex-end" alignItems="center" fontSize="xs" color="gray">
-            <Icon as={MdComment} />
-            <Text ml="1">2</Text>
-            <Icon ml="2" as={MdAttachFile} />
-            <Text ml="1">2</Text>
+          <Icon as={MdComment} />
+          <Text ml="1">2</Text>
+          <Icon ml="2" as={MdAttachFile} />
+          <Text ml="1">2</Text>
         </Flex>
       </Flex>
     </LinkBox>

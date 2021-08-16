@@ -21,7 +21,7 @@ const TaskListArea = () => {
   const [adding, setAdding] = useBoolean();
   const [listName, setListName] = useState('');
   const ref = useRef();
-  const { lists } = usetaskList(boardDetail?.id);
+  const { lists, addList } = usetaskList(boardDetail?.id);
 
   const handleAddStart = () => {
     setAdding.on();
@@ -32,8 +32,9 @@ const TaskListArea = () => {
     setListName('');
   };
 
-  const handleAddComit = (e: FormEvent) => {
+  const handleAddComit = async (e: FormEvent) => {
     e.preventDefault();
+    await addList(listName);
     handleAddEnd();
   };
 
@@ -54,7 +55,7 @@ const TaskListArea = () => {
     >
       {lists.map((l) => (
         <Box key={l.id} w="260px">
-          <TaskList />
+          <TaskList list={l} />
         </Box>
       ))}
       <Box w="260px">

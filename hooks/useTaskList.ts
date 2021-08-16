@@ -1,4 +1,7 @@
-import { getTaskLists as getTaskListsApi } from '../api/taskList';
+import {
+  createTaskList as createTaskListApi,
+  getTaskLists as getTaskListsApi,
+} from '../api/taskList';
 import { Board } from '../types/board';
 import { TaskList } from '../types/taskList';
 import { useEffect, useState } from 'react';
@@ -24,7 +27,22 @@ const usetaskList = (boardId: Board['id']) => {
     }
   };
 
-  return { lists };
+  const addList = async (listName: TaskList['listName']) => {
+    try {
+      const res = await createTaskListApi(boardId, listName);
+      const newList = {
+        ...res.data,
+        Task: [],
+      };
+      setLists((prev) => [...prev, newList]);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('f');
+    }
+  };
+
+  return { lists, addList };
 };
 
 export default usetaskList;
