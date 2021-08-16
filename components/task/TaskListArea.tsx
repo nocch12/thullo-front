@@ -46,19 +46,21 @@ const TaskListArea = () => {
   return (
     <HStack
       overflowX="auto"
-      spacing={4}
+      spacing={6}
       flexGrow={1}
       alignItems="flex-start"
       bgColor="teal.50"
       p="4"
+      h="full"
       rounded="md"
+      overflowY="hidden"
     >
       {lists.map((l) => (
-        <Box key={l.id} w="260px">
+        <Box key={l.id} minW="280px" h="full">
           <TaskList list={l} />
         </Box>
       ))}
-      <Box w="260px">
+      <Box minW="280px">
         {adding ? (
           <Box
             as="form"

@@ -39,6 +39,7 @@ const boardTop: VFC = () => {
       h="full"
       display="flex"
       flexDirection="column"
+      overflowY="auto"
     >
       <BoardDetailHeader />
       <TaskListArea />

@@ -14,8 +14,15 @@ import { MdApps, MdSearch } from 'react-icons/md';
 
 const Header = () => {
   return (
-    <Container maxWidth="container.xl" py={2} borderBottom={1} shadow="sm">
-      <Flex as="header" alignItems="center">
+    <Container
+      maxWidth="container.xl"
+      py={2}
+      borderBottom={1}
+      shadow="sm"
+      h="14"
+      minH="14"
+    >
+      <Flex as="header" alignItems="center" h="full">
         <Box pr={8}>header</Box>
         <BoardArea />
         <Spacer />

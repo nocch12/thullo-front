@@ -13,6 +13,7 @@ import {
   Wrap,
   WrapItem,
   Badge,
+  Spacer,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { VFC } from 'react';
@@ -27,65 +28,58 @@ const TaskCard: VFC<Props> = ({ boardId, task }) => {
   return (
     <LinkBox p="2" w="full" shadow="sm" bg="white" rounded="md">
       {/* 画像 */}
-      <Image
-        h="100px"
-        w="full"
-        src="gibbresh.png"
-        fallbackSrc="https://via.placeholder.com/150"
-        rounded="md"
-        mb="2"
-      />
+      {task.imgePath ? (
+        <Image
+          h="100px"
+          w="full"
+          src={task.imgePath}
+          fallbackSrc="https://via.placeholder.com/150"
+          rounded="md"
+          mb="2"
+        />
+      ) : null}
       {/* タイトル */}
       <Link href={`/boards/${boardId}/${task.id}`} passHref>
         <LinkOverlay>
-          <Text mb="2" fontWeight="bold">
-            {task.taskName}
-          </Text>
+          <Text fontWeight="bold">{task.taskName}</Text>
         </LinkOverlay>
       </Link>
       {/* タグ */}
-      <Wrap spacing="1" mb="2">
-        <WrapItem>
-          <Badge fontWeight="normal">test</Badge>
-        </WrapItem>
-        <WrapItem>
-          <Badge>test</Badge>
-        </WrapItem>
-        <WrapItem>
-          <Badge>test</Badge>
-        </WrapItem>
-        <WrapItem>
-          <Badge>test</Badge>
-        </WrapItem>
-        <WrapItem>
-          <Badge>test</Badge>
-        </WrapItem>
-        <WrapItem>
-          <Badge>test</Badge>
-        </WrapItem>
-      </Wrap>
-      <Flex alignItems="center" justify="space-between">
-        {/* メンバー */}
-        <Box>
-          <AvatarGroup size="sm" max={3}>
-            <Avatar name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-            <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-            <Avatar name="Kent Dodds" src="https://bit.ly/kent-c-dodds" />
-            <Avatar
-              name="Prosper Otemuyiwa"
-              src="https://bit.ly/prosper-baba"
-            />
-            <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
-          </AvatarGroup>
-        </Box>
-        {/* コメント、ファイル */}
-        <Flex justify="flex-end" alignItems="center" fontSize="xs" color="gray">
-          <Icon as={MdComment} />
-          <Text ml="1">2</Text>
-          <Icon ml="2" as={MdAttachFile} />
-          <Text ml="1">2</Text>
+      {task.labels?.length && (
+        <Wrap spacing="1" mt="2">
+          {task.labels.map((l) => (
+            <WrapItem>
+              <Badge fontWeight="normal">test</Badge>
+            </WrapItem>
+          ))}
+        </Wrap>
+      )}
+      {task.users?.length && (
+        <Flex mt="2" alignItems="center" justify="space-between">
+          {/* メンバー */}
+          <Box>
+            <AvatarGroup size="sm" max={3}>
+              {task.users.map((u) => (
+                <Avatar name={u.name} src={u.imagePath} />
+              ))}
+            </AvatarGroup>
+          </Box>
+          {/* コメント、ファイル */}
+          {task.commentCount || task.fileCount ? (
+            <Flex
+              justify="flex-end"
+              alignItems="center"
+              fontSize="xs"
+              color="gray"
+            >
+              <Icon as={MdComment} />
+              <Text ml="1">{task.commentCount || 0}</Text>
+              <Icon ml="2" as={MdAttachFile} />
+              <Text ml="1">{task.fileCount || 0}</Text>
+            </Flex>
+          ) : null}
         </Flex>
-      </Flex>
+      )}
     </LinkBox>
   );
 };

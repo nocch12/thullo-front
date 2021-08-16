@@ -26,8 +26,14 @@ const TaskListComponent: VFC<Props> = ({ list }) => {
   };
 
   return (
-    <Box w="full">
-      <Flex alignItems="center" justify="space-between" mb="2">
+    <Flex
+      w="full"
+      h="full"
+      flexDirection="column"
+      rounded="md"
+      bgColor="gray.50"
+    >
+      <Flex alignItems="center" justify="space-between" mb="2" p={2}>
         <Editable
           defaultValue={list.listName}
           onCancel={handleCancel}
@@ -41,12 +47,12 @@ const TaskListComponent: VFC<Props> = ({ list }) => {
         </Editable>
         <Icon as={MdMoreHoriz} />
       </Flex>
-      <VStack spacing="2">
+      <VStack spacing="2" p={2} overflowY="auto" flex={1}>
         {list.Task.map((t) => (
           <TaskCard key={t.id} boardId={list.boardId} task={t} />
         ))}
       </VStack>
-    </Box>
+    </Flex>
   );
 };
 
