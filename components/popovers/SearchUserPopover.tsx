@@ -88,14 +88,14 @@ const SearchUserPopover: VFC<PropsWithChildren<Props>> = ({
             onSearch={handleSearch}
           />
           <Spacer mb="2" />
-          <Box rounded="md" shadow="md">
+          <Box rounded="md" shadow="md" p={2}>
             {searching ? (
               '検索中...'
             ) : users.length === 0 ? (
-              '見つかりませんでした'
+              'ユーザーが見つかりませんでした'
             ) : (
               <CheckboxGroup onChange={handleCheck} value={checked}>
-                <List py={2}>
+                <List>
                   {users.map((u) => (
                     <ListItem w="full" key={u.id.toString()}>
                       <Box

@@ -1,3 +1,4 @@
+import TaskCard from './TaskCard';
 import { Icon } from '@chakra-ui/icons';
 import {
   Box,
@@ -10,8 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { MdMoreHoriz } from 'react-icons/md';
 
-import TaskCard from './TaskCard';
-
 const TaskList = () => {
   const handleCancel = () => {
     console.log('cancel');
@@ -21,7 +20,7 @@ const TaskList = () => {
   };
 
   return (
-    <Box minW="260px">
+    <Box w="full">
       <Flex alignItems="center" justify="space-between" mb="2">
         <Editable
           defaultValue="heading"
