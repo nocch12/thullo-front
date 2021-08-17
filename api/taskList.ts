@@ -1,21 +1,28 @@
 import { axios } from '../libs/axios';
 import { Board } from '../types/board';
-import { TaskList } from '../types/taskList';
+import { TTaskList } from '../types/taskList';
 
 // タスクリスト一覧取得
 export const getTaskLists = (boardId: Board['id']) => {
-  return axios.get<TaskList[]>(`/board/${boardId}/taskList`);
+  return axios.get<TTaskList[]>(`/board/${boardId}/taskList`);
 };
 
 // タスクリスト作成
 export const createTaskList = (
   boardId: Board['id'],
-  listName: TaskList['listName'],
-  order: TaskList['order']
+  listName: TTaskList['listName'],
+  order: TTaskList['order']
 ) => {
-  return axios.post<TaskList>(`/taskList`, {
+  return axios.post<TTaskList>(`/taskList`, {
     boardId,
     listName,
     order,
+  });
+};
+
+// タスクリスト削除
+export const deleteTaskList = (listId: TTaskList['id']) => {
+  return axios.post<boolean>(`/taskList/delete`, {
+    listId,
   });
 };

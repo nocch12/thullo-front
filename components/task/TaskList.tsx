@@ -1,5 +1,5 @@
 import useTask from '../../hooks/useTask';
-import { TaskList } from '../../types/taskList';
+import { TTaskList } from '../../types/taskList';
 import AddTaskButton from '../button/AddTaskButton';
 import TaskCard from './TaskCard';
 import { Icon } from '@chakra-ui/icons';
@@ -17,15 +17,20 @@ import {
   ButtonGroup,
   Button,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import { VFC, useRef, FormEvent, ChangeEvent, useState } from 'react';
 import { MdClose, MdMoreHoriz } from 'react-icons/md';
 
 type Props = {
-  list: TaskList;
+  list: TTaskList;
+  onDelete: () => void;
 };
 
-const TaskListComponent: VFC<Props> = ({ list }) => {
+const TaskListComponent: VFC<Props> = ({ list, onDelete }) => {
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
   const { taskList, addTask } = useTask(list);
@@ -67,7 +72,14 @@ const TaskListComponent: VFC<Props> = ({ list }) => {
       rounded="md"
       bgColor="gray.50"
     >
-      <Flex alignItems="center" justify="space-between" mb="2" p={2}>
+      <Flex
+        alignItems="center"
+        justify="space-between"
+        mb="2"
+        pt={2}
+        pr={2}
+        pl={3}
+      >
         <Editable
           defaultValue={taskList.listName}
           onCancel={handleCancel}
@@ -79,7 +91,18 @@ const TaskListComponent: VFC<Props> = ({ list }) => {
           <EditablePreview as="h3" fontSize="md" fontWeight="bold" />
           <EditableInput />
         </Editable>
-        <Icon as={MdMoreHoriz} />
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="delete list"
+            variant="ghost"
+            icon={<MdMoreHoriz />}
+            size="sm"
+          />
+          <MenuList>
+            <MenuItem onClick={onDelete}>リストを削除</MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
       <VStack spacing="2" p={2} overflowY="auto" flex={1}>
         {taskList.Task.map((t) => (

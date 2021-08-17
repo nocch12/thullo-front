@@ -1,14 +1,15 @@
 import {
   createTaskList as createTaskListApi,
+  deleteTaskList as deleteTaskListApi,
   getTaskLists as getTaskListsApi,
 } from '../api/taskList';
 import { DEFAULT_ORDER } from '../config/const';
 import { Board } from '../types/board';
-import { TaskList } from '../types/taskList';
+import { TTaskList } from '../types/taskList';
 import { useEffect, useState } from 'react';
 
 const usetaskList = (boardId: Board['id']) => {
-  const [lists, setLists] = useState<TaskList[]>([]);
+  const [lists, setLists] = useState<TTaskList[]>([]);
 
   const nextOrder = lists?.slice(-1)[0]?.order + DEFAULT_ORDER;
 
@@ -30,7 +31,7 @@ const usetaskList = (boardId: Board['id']) => {
     }
   };
 
-  const addList = async (listName: TaskList['listName']) => {
+  const addList = async (listName: TTaskList['listName']) => {
     try {
       const res = await createTaskListApi(boardId, listName, nextOrder);
       const newList = {
@@ -45,7 +46,18 @@ const usetaskList = (boardId: Board['id']) => {
     }
   };
 
-  return { lists, addList };
+  const deleteList = async (listId: TTaskList['id']) => {
+    try {
+      const res = await deleteTaskListApi(listId);
+      setLists((prev) => prev.filter((list) => list.id !== listId));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log('f');
+    }
+  };
+
+  return { lists, addList, deleteList };
 };
 
 export default usetaskList;

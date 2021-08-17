@@ -1,10 +1,10 @@
 import { axios } from '../libs/axios';
 import { Task } from '../types/task';
-import { TaskList } from '../types/taskList';
+import { TTaskList } from '../types/taskList';
 
 // タスク作成
 export const createTask = (
-  listId: TaskList['id'],
+  listId: TTaskList['id'],
   taskName: Task['taskName'],
   order: Task['order']
 ) => {

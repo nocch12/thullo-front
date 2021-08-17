@@ -1,5 +1,6 @@
 import useBoardDetail from '../../hooks/useBoardDetail';
 import usetaskList from '../../hooks/useTaskList';
+import { TTaskList } from '../../types/taskList';
 import AddTaskButton from '../button/AddTaskButton';
 import TaskList from './TaskList';
 import {
@@ -21,7 +22,7 @@ const TaskListArea = () => {
   const [adding, setAdding] = useBoolean();
   const [listName, setListName] = useState('');
   const ref = useRef();
-  const { lists, addList } = usetaskList(boardDetail?.id);
+  const { lists, addList, deleteList } = usetaskList(boardDetail?.id);
 
   const handleAddStart = () => {
     setAdding.on();
@@ -35,6 +36,11 @@ const TaskListArea = () => {
   const handleAddComit = async (e: FormEvent) => {
     e.preventDefault();
     await addList(listName);
+    handleAddEnd();
+  };
+
+  const handleDeleteList = async (listId: TTaskList['id']) => {
+    await deleteList(listId);
     handleAddEnd();
   };
 
@@ -57,7 +63,7 @@ const TaskListArea = () => {
     >
       {lists.map((l) => (
         <Box key={l.id} minW="280px" h="full">
-          <TaskList list={l} />
+          <TaskList list={l} onDelete={() => handleDeleteList(l.id)} />
         </Box>
       ))}
       <Box minW="280px">
