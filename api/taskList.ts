@@ -7,12 +7,15 @@ export const getTaskLists = (boardId: Board['id']) => {
   return axios.get<TaskList[]>(`/board/${boardId}/taskList`);
 };
 
-// タスクリスト取得
+// タスクリスト作成
 export const createTaskList = (
   boardId: Board['id'],
-  listName: TaskList['listName']
+  listName: TaskList['listName'],
+  order: TaskList['order']
 ) => {
-  return axios.post<TaskList>(`/board/${boardId}/taskList`, {
+  return axios.post<TaskList>(`/taskList`, {
+    boardId,
     listName,
+    order,
   });
 };

@@ -2,12 +2,15 @@ import {
   createTaskList as createTaskListApi,
   getTaskLists as getTaskListsApi,
 } from '../api/taskList';
+import { DEFAULT_ORDER } from '../config/const';
 import { Board } from '../types/board';
 import { TaskList } from '../types/taskList';
 import { useEffect, useState } from 'react';
 
 const usetaskList = (boardId: Board['id']) => {
   const [lists, setLists] = useState<TaskList[]>([]);
+
+  const nextOrder = lists?.slice(-1)[0]?.order + DEFAULT_ORDER;
 
   useEffect(() => {
     setLists([]);
@@ -29,7 +32,7 @@ const usetaskList = (boardId: Board['id']) => {
 
   const addList = async (listName: TaskList['listName']) => {
     try {
-      const res = await createTaskListApi(boardId, listName);
+      const res = await createTaskListApi(boardId, listName, nextOrder);
       const newList = {
         ...res.data,
         Task: [],
