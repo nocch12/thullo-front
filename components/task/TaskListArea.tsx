@@ -15,7 +15,9 @@ import {
   useOutsideClick,
 } from '@chakra-ui/react';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { MdClose } from 'react-icons/md';
+import useDND from '../../hooks/useDND';
 
 const TaskListArea = () => {
   const { boardDetail } = useBoardDetail();
@@ -23,6 +25,7 @@ const TaskListArea = () => {
   const [listName, setListName] = useState('');
   const ref = useRef();
   const { lists, addList, deleteList } = usetaskList(boardDetail?.id);
+  const { handleDragStart, handleDragEnd } = useDND();
 
   const handleAddStart = () => {
     setAdding.on();
@@ -50,61 +53,102 @@ const TaskListArea = () => {
   });
 
   return (
-    <HStack
+    <Box
       overflowX="auto"
-      spacing={6}
       flexGrow={1}
-      alignItems="flex-start"
       bgColor="teal.50"
       p="4"
       h="full"
       rounded="md"
       overflowY="hidden"
     >
-      {lists.map((l) => (
-        <Box key={l.id} minW="280px" h="full">
-          <TaskList list={l} onDelete={() => handleDeleteList(l.id)} />
-        </Box>
-      ))}
-      <Box minW="280px">
-        {adding ? (
-          <Box
-            as="form"
-            p={2}
-            rounded="md"
-            shadow="sm"
-            bgColor="white"
-            ref={ref}
-            onSubmit={handleAddComit}
+      <HStack alignItems="flex-start" spacing={6}>
+        <DragDropContext
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <Droppable
+            droppableId="droppable-LISTAREA"
+            direction="horizontal"
+            type="LIST"
           >
-            <Input
-              size="sm"
+            {(provided) => (
+              <HStack
+                alignItems="flex-start"
+                spacing={6}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {lists.map((l, index) => (
+                  <Draggable
+                    key={l.id}
+                    draggableId={`draggable-LIST-${l.id}`}
+                    index={index}
+                  >
+                    {(draggableProvided) => (
+                      <Box
+                        key={l.id}
+                        minW="280px"
+                        h="full"
+                        ref={draggableProvided.innerRef}
+                        {...draggableProvided.draggableProps}
+                      >
+                        <TaskList
+                          list={l}
+                          onDelete={() => handleDeleteList(l.id)}
+                          listDragHandleProps={
+                            draggableProvided.dragHandleProps
+                          }
+                        />
+                      </Box>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </HStack>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <Box minW="280px">
+          {adding ? (
+            <Box
+              as="form"
+              p={2}
               rounded="md"
-              value={listName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setListName(e.target.value)
-              }
-            />
-            <ButtonGroup mt={2} alignItems="center">
-              <Button type="submit" size="sm" colorScheme="teal">
-                追加
-              </Button>
-              <IconButton
-                aria-label="cancel"
+              shadow="sm"
+              bgColor="white"
+              ref={ref}
+              onSubmit={handleAddComit}
+            >
+              <Input
                 size="sm"
-                icon={<Icon as={MdClose} />}
-                variant="ghost"
-                onClick={handleAddEnd}
+                rounded="md"
+                value={listName}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setListName(e.target.value)
+                }
               />
-            </ButtonGroup>
-          </Box>
-        ) : (
-          <AddTaskButton size="sm" onClick={handleAddStart}>
-            リストを追加
-          </AddTaskButton>
-        )}
-      </Box>
-    </HStack>
+              <ButtonGroup mt={2} alignItems="center">
+                <Button type="submit" size="sm" colorScheme="teal">
+                  追加
+                </Button>
+                <IconButton
+                  aria-label="cancel"
+                  size="sm"
+                  icon={<Icon as={MdClose} />}
+                  variant="ghost"
+                  onClick={handleAddEnd}
+                />
+              </ButtonGroup>
+            </Box>
+          ) : (
+            <AddTaskButton size="sm" onClick={handleAddStart}>
+              リストを追加
+            </AddTaskButton>
+          )}
+        </Box>
+      </HStack>
+    </Box>
   );
 };
 

@@ -24,16 +24,29 @@ import {
 } from '@chakra-ui/react';
 import { VFC, useRef, FormEvent, ChangeEvent, useState } from 'react';
 import { MdClose, MdMoreHoriz } from 'react-icons/md';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvidedDragHandleProps,
+  Droppable,
+} from 'react-beautiful-dnd';
+import useDND from '../../hooks/useDND';
 
 type Props = {
   list: TTaskList;
   onDelete: () => void;
+  listDragHandleProps?: DraggableProvidedDragHandleProps;
 };
 
-const TaskListComponent: VFC<Props> = ({ list, onDelete }) => {
+const TaskListComponent: VFC<Props> = ({
+  list,
+  onDelete,
+  listDragHandleProps,
+}) => {
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
   const { taskList, addTask } = useTask(list);
+  const { createDroppableId, createDraggableId } = useDND();
 
   const ref = useRef();
 
@@ -98,53 +111,83 @@ const TaskListComponent: VFC<Props> = ({ list, onDelete }) => {
             variant="ghost"
             icon={<MdMoreHoriz />}
             size="sm"
+            cursor="pointer"
+            {...listDragHandleProps}
+            style={{ cursor: 'pointer' }}
           />
           <MenuList>
             <MenuItem onClick={onDelete}>リストを削除</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
-      <VStack spacing="2" p={2} overflowY="auto" flex={1}>
-        {taskList.Task.map((t) => (
-          <TaskCard key={t.id} boardId={taskList.boardId} task={t} />
-        ))}
-        {adding ? (
-          <Box
-            as="form"
+      <Droppable
+        droppableId={createDroppableId('LIST', taskList.id)}
+        type="TASK"
+      >
+        {(dropableProvided) => (
+          <VStack
+            spacing="2"
             p={2}
-            rounded="md"
-            shadow="sm"
-            bgColor="white"
-            ref={ref}
-            onSubmit={handleAddComit}
+            overflowY="auto"
+            flex={1}
+            ref={dropableProvided.innerRef}
+            {...dropableProvided.droppableProps}
           >
-            <Input
-              size="sm"
-              rounded="md"
-              value={taskName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setTaskName(e.target.value)
-              }
-            />
-            <ButtonGroup mt={2} alignItems="center">
-              <Button type="submit" size="sm" colorScheme="teal">
-                追加
-              </Button>
-              <IconButton
-                aria-label="cancel"
-                size="sm"
-                icon={<Icon as={MdClose} />}
-                variant="ghost"
-                onClick={handleAddEnd}
-              />
-            </ButtonGroup>
-          </Box>
-        ) : (
-          <AddTaskButton size="sm" onClick={handleAddStart}>
-            リストを追加
-          </AddTaskButton>
+            {taskList.Task.map((t, index) => (
+              <Draggable
+                key={t.id}
+                draggableId={createDraggableId('TASK', t.id)}
+                index={index}
+              >
+                {(draggableProvided) => (
+                  <TaskCard
+                    boardId={taskList.boardId}
+                    task={t}
+                    taskDraggableProvided={draggableProvided}
+                  />
+                )}
+              </Draggable>
+            ))}
+            {dropableProvided.placeholder}
+            {adding ? (
+              <Box
+                as="form"
+                p={2}
+                rounded="md"
+                shadow="sm"
+                bgColor="white"
+                ref={ref}
+                onSubmit={handleAddComit}
+              >
+                <Input
+                  size="sm"
+                  rounded="md"
+                  value={taskName}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setTaskName(e.target.value)
+                  }
+                />
+                <ButtonGroup mt={2} alignItems="center">
+                  <Button type="submit" size="sm" colorScheme="teal">
+                    追加
+                  </Button>
+                  <IconButton
+                    aria-label="cancel"
+                    size="sm"
+                    icon={<Icon as={MdClose} />}
+                    variant="ghost"
+                    onClick={handleAddEnd}
+                  />
+                </ButtonGroup>
+              </Box>
+            ) : (
+              <AddTaskButton size="sm" onClick={handleAddStart}>
+                リストを追加
+              </AddTaskButton>
+            )}
+          </VStack>
         )}
-      </VStack>
+      </Droppable>
     </Flex>
   );
 };
