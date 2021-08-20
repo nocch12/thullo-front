@@ -24,7 +24,7 @@ const TaskListArea = () => {
   const [adding, setAdding] = useBoolean();
   const [listName, setListName] = useState('');
   const ref = useRef();
-  const { lists, addList, deleteList } = usetaskList(boardDetail?.id);
+  const { listIds, lists, addList, deleteList } = usetaskList(boardDetail?.id);
   const { handleDragStart, handleDragEnd } = useDND();
 
   const handleAddStart = () => {
@@ -79,23 +79,23 @@ const TaskListArea = () => {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {lists.map((l, index) => (
+                {listIds.map((id, index) => (
                   <Draggable
-                    key={l.id}
-                    draggableId={`draggable-LIST-${l.id}`}
+                    key={id}
+                    draggableId={`draggable-LIST-${id}`}
                     index={index}
                   >
                     {(draggableProvided) => (
                       <Box
-                        key={l.id}
+                        key={id}
                         minW="280px"
                         h="full"
                         ref={draggableProvided.innerRef}
                         {...draggableProvided.draggableProps}
                       >
                         <TaskList
-                          list={l}
-                          onDelete={() => handleDeleteList(l.id)}
+                          list={lists[id]}
+                          onDelete={() => handleDeleteList(id)}
                           listDragHandleProps={
                             draggableProvided.dragHandleProps
                           }

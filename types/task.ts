@@ -10,3 +10,5 @@ export type Task = {
   users: TSimpleUser[];
   labels: [];
 };
+
+export type TTaskIds = Task['id'][];

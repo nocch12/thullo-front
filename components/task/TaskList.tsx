@@ -7,7 +7,6 @@ import {
   Box,
   Flex,
   VStack,
-  Heading,
   Editable,
   EditableInput,
   EditablePreview,
@@ -25,7 +24,6 @@ import {
 import { VFC, useRef, FormEvent, ChangeEvent, useState } from 'react';
 import { MdClose, MdMoreHoriz } from 'react-icons/md';
 import {
-  DragDropContext,
   Draggable,
   DraggableProvidedDragHandleProps,
   Droppable,
@@ -45,8 +43,11 @@ const TaskListComponent: VFC<Props> = ({
 }) => {
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
-  const { taskList, addTask } = useTask(list);
+  const { addTask } = useTask(list);
   const { createDroppableId, createDraggableId } = useDND();
+  console.log('====================================');
+  console.log(list);
+  console.log('====================================');
 
   const ref = useRef();
 
@@ -94,7 +95,7 @@ const TaskListComponent: VFC<Props> = ({
         pl={3}
       >
         <Editable
-          defaultValue={taskList.listName}
+          defaultValue={list.listName}
           onCancel={handleCancel}
           onChange={handleChange}
           onSubmit={handleChange}
@@ -120,10 +121,7 @@ const TaskListComponent: VFC<Props> = ({
           </MenuList>
         </Menu>
       </Flex>
-      <Droppable
-        droppableId={createDroppableId('LIST', taskList.id)}
-        type="TASK"
-      >
+      <Droppable droppableId={createDroppableId('LIST', list.id)} type="TASK">
         {(dropableProvided) => (
           <VStack
             spacing="2"
@@ -133,17 +131,18 @@ const TaskListComponent: VFC<Props> = ({
             ref={dropableProvided.innerRef}
             {...dropableProvided.droppableProps}
           >
-            {taskList.Task.map((t, index) => (
+            {list.Task.map((t, index) => (
               <Draggable
                 key={t.id}
                 draggableId={createDraggableId('TASK', t.id)}
                 index={index}
               >
-                {(draggableProvided) => (
+                {(draggableProvided, snapshot) => (
                   <TaskCard
-                    boardId={taskList.boardId}
+                    boardId={list.boardId}
                     task={t}
                     taskDraggableProvided={draggableProvided}
+                    snapshot={snapshot}
                   />
                 )}
               </Draggable>
