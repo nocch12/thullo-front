@@ -3,9 +3,9 @@ import { createTask as createTaskApi } from '../api/task';
 import { DEFAULT_ORDER } from '../config/const';
 import { taskListsState } from '../store/taskList';
 import { Task } from '../types/task';
-import { TTaskList } from '../types/taskList';
+import { TTaskListFormatted } from '../types/taskList';
 
-const useTask = (list: TTaskList) => {
+const useTask = (list: TTaskListFormatted) => {
   const [lists, setLists] = useRecoilState(taskListsState);
 
   // const nextOrder = list.Task.slice(-1)[0]?.order + DEFAULT_ORDER;

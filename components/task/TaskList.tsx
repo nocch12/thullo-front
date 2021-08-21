@@ -1,5 +1,5 @@
 import useTask from '../../hooks/useTask';
-import { TTaskList } from '../../types/taskList';
+import { TTaskListFormatted } from '../../types/taskList';
 import AddTaskButton from '../button/AddTaskButton';
 import TaskCard from './TaskCard';
 import { Icon } from '@chakra-ui/icons';
@@ -29,14 +29,18 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import useDND from '../../hooks/useDND';
+import usetaskList from '../../hooks/useTaskList';
+import { TTasks } from '../../types/task';
 
 type Props = {
-  list: TTaskList;
+  tasks: TTasks;
+  list: TTaskListFormatted;
   onDelete: () => void;
   listDragHandleProps?: DraggableProvidedDragHandleProps;
 };
 
 const TaskListComponent: VFC<Props> = ({
+  tasks,
   list,
   onDelete,
   listDragHandleProps,
@@ -44,10 +48,6 @@ const TaskListComponent: VFC<Props> = ({
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
   const { addTask } = useTask(list);
-  const { createDroppableId, createDraggableId } = useDND();
-  console.log('====================================');
-  console.log(list);
-  console.log('====================================');
 
   const ref = useRef();
 
@@ -121,7 +121,7 @@ const TaskListComponent: VFC<Props> = ({
           </MenuList>
         </Menu>
       </Flex>
-      <Droppable droppableId={createDroppableId('LIST', list.id)} type="TASK">
+      <Droppable droppableId={list.id.toString()} type="TASK">
         {(dropableProvided) => (
           <VStack
             spacing="2"
@@ -131,16 +131,12 @@ const TaskListComponent: VFC<Props> = ({
             ref={dropableProvided.innerRef}
             {...dropableProvided.droppableProps}
           >
-            {list.Task.map((t, index) => (
-              <Draggable
-                key={t.id}
-                draggableId={createDraggableId('TASK', t.id)}
-                index={index}
-              >
+            {list.Task.map((tid, index) => (
+              <Draggable key={tid} draggableId={tid.toString()} index={index}>
                 {(draggableProvided, snapshot) => (
                   <TaskCard
                     boardId={list.boardId}
-                    task={t}
+                    task={tasks[tid]}
                     taskDraggableProvided={draggableProvided}
                     snapshot={snapshot}
                   />

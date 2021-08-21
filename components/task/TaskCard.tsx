@@ -33,8 +33,9 @@ const TaskCard: VFC<Props> = ({
   taskDraggableProvided,
   snapshot,
 }) => {
-  const { isCurrentDragging, createDraggableId } = useDND();
-  const isShadow = isCurrentDragging(createDraggableId('TASK', task.id));
+  const { isCurrentDragging } = useDND();
+
+  const isShadow = isCurrentDragging(task.id.toString());
   function getStyle(style, snapshot) {
     if (!snapshot.isDropAnimating) {
       return style;
@@ -54,7 +55,7 @@ const TaskCard: VFC<Props> = ({
       ref={taskDraggableProvided.innerRef}
       {...taskDraggableProvided.draggableProps}
       {...taskDraggableProvided.dragHandleProps}
-      style={getStyle(taskDraggableProvided.draggableProps.style, snapshot)}
+      // style={getStyle(taskDraggableProvided.draggableProps.style, snapshot)}
     >
       <LinkBox p="2">
         {/* 画像 */}
