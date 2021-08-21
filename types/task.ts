@@ -1,5 +1,9 @@
 import { TSimpleUser } from './user';
 
+export type TTasks = {
+  [key in Task['id']]: Task;
+};
+
 export type Task = {
   id: number;
   taskName: string;

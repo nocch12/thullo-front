@@ -28,50 +28,100 @@ const useDND = () => {
   const taskDragEnd = (result: DropResult) => {
     console.log('start', { lists });
 
-    const { destination, source } = result;
-    const destId = replaceId(destination.droppableId);
-    const sourceId = replaceId(source.droppableId);
+    const { destination, source, draggableId } = result;
+    const destId = destination.droppableId;
+    const sourceId = source.droppableId;
 
-    // 移動元リスト
-    const sourceListIdx = lists.findIndex((l) => l.id === sourceId);
-
-    const newSourceTasks = [...lists[sourceListIdx].Task];
-    // 移動対象タスク
-    const [task] = newSourceTasks.splice(source.index, 1);
-    if (destId === sourceId) {
-      newSourceTasks.splice(destination.index, 0, task);
-      const newSourceList: TTaskList = {
-        ...lists[sourceListIdx],
-        Task: newSourceTasks,
-      };
-      const newLists = [...lists];
-      newLists.splice(sourceListIdx, 1, newSourceList);
-      setLists(newLists);
-      setCurrentDraggingTask('');
+    if (destId === sourceId && destination.index === source.index) {
       return;
     }
 
-    const newSourceList: TTaskList = {
-      ...lists[sourceListIdx],
-      Task: newSourceTasks,
+    const start = lists[sourceId];
+    const finish = lists[destId];
+
+    if (start === finish) {
+      const newTaskIds = Array.from(start.Task);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      const newColumn = {
+        ...start,
+        Task: newTaskIds,
+      };
+
+      const newLists = {
+        ...lists,
+        [newColumn.id]: newColumn,
+      };
+
+      setLists(newLists);
+      return;
+    }
+
+    // Moving from one list to another
+    const startTaskIds = Array.from(start.Task);
+    startTaskIds.splice(source.index, 1);
+    const newStart = {
+      ...start,
+      Task: startTaskIds,
     };
 
-    // 移動先リスト
-    const targetListIdx = lists.findIndex((l) => l.id === destId);
-    const newTargetTasks = [...lists[targetListIdx].Task];
-    newTargetTasks.splice(destination.index, 0, task);
-    const newTargetList: TTaskList = {
-      ...lists[targetListIdx],
-      Task: newTargetTasks,
+    const finishTaskIds = Array.from(finish.Task);
+    finishTaskIds.splice(destination.index, 0, draggableId);
+    const newFinish = {
+      ...finish,
+      Task: finishTaskIds,
     };
 
-    const newLists = [...lists];
-    newLists.splice(sourceListIdx, 1, newSourceList);
-    newLists.splice(targetListIdx, 1, newTargetList);
-    setLists(newLists);
+    const newState = {
+      ...lists,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish,
+    };
 
-    setCurrentDraggingTask('');
+    setLists(newState);
   };
+
+  //   // 移動元リスト
+  //   const sourceListIdx = lists.findIndex((l) => l.id === sourceId);
+
+  //   const newSourceTasks = [...lists[sourceListIdx].Task];
+  //   // 移動対象タスク
+  //   const [task] = newSourceTasks.splice(source.index, 1);
+  //   if (destId === sourceId) {
+  //     newSourceTasks.splice(destination.index, 0, task);
+  //     const newSourceList: TTaskList = {
+  //       ...lists[sourceListIdx],
+  //       Task: newSourceTasks,
+  //     };
+  //     const newLists = [...lists];
+  //     newLists.splice(sourceListIdx, 1, newSourceList);
+  //     setLists(newLists);
+  //     setCurrentDraggingTask('');
+  //     return;
+  //   }
+
+  //   const newSourceList: TTaskList = {
+  //     ...lists[sourceListIdx],
+  //     Task: newSourceTasks,
+  //   };
+
+  //   // 移動先リスト
+  //   const targetListIdx = lists.findIndex((l) => l.id === destId);
+  //   const newTargetTasks = [...lists[targetListIdx].Task];
+  //   newTargetTasks.splice(destination.index, 0, task);
+  //   const newTargetList: TTaskList = {
+  //     ...lists[targetListIdx],
+  //     Task: newTargetTasks,
+  //   };
+
+  //   const newLists = [...lists];
+  //   newLists.splice(sourceListIdx, 1, newSourceList);
+  //   newLists.splice(targetListIdx, 1, newTargetList);
+  //   setLists(newLists);
+
+  //   setCurrentDraggingTask('');
+  // };
 
   // 現在ドラッグ中かどうか
   const isCurrentDragging = (draggableId: Id) =>
@@ -95,36 +145,11 @@ const useDND = () => {
     }
   };
 
-  // id作成
-  const createDroppableId = (type: TDND_TYPE, id: Id | number) =>
-    `${DND_PREFIX.DROP}-${type}-${id}`;
-  const createDraggableId = (type: TDND_TYPE, id: Id | number) =>
-    `${DND_PREFIX.DRAG}-${type}-${id}`;
-
-  // idの数値のみ抜き出し
-  const replaceId = (id: string) => {
-    const listDropIdPrefix = createDroppableId('LIST', '');
-    const taskDropIdPrefix = createDroppableId('TASK', '');
-    const listDragIdPrefix = createDraggableId('LIST', '');
-    const taskDragIdPrefix = createDraggableId('TASK', '');
-
-    const replaced = id
-      .replace(listDropIdPrefix, '')
-      .replace(taskDropIdPrefix, '')
-      .replace(listDragIdPrefix, '')
-      .replace(taskDragIdPrefix, '');
-
-    return Number(replaced);
-  };
-
   return {
     taskDragStart,
     isCurrentDragging,
     handleDragStart,
     handleDragEnd,
-    createDroppableId,
-    createDraggableId,
-    replaceId,
   };
 };
 

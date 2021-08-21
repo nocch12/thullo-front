@@ -42,7 +42,7 @@ const boardTop: VFC = () => {
       overflowY="auto"
     >
       <BoardDetailHeader />
-      <TaskListArea />
+      <TaskListArea boardId={Number(boardId)} />
       {typeof taskId === 'string' && <TaskModal taskId={taskId} />}
     </Container>
   );

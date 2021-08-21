@@ -9,10 +9,12 @@ import { TTaskList, TTaskLists } from '../types/taskList';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { taskListsOrderState, taskListsState } from '../store/taskList';
+import { TasksState } from '../store/task';
 
 const usetaskList = (boardId: Board['id']) => {
   const [lists, setLists] = useRecoilState(taskListsState);
   const [listIds, setListIds] = useRecoilState(taskListsOrderState);
+  const [tasks, setTasks] = useRecoilState(TasksState);
 
   // const nextOrder = lists?.slice(-1)[0]?.order + DEFAULT_ORDER;
   const nextOrder = DEFAULT_ORDER;
@@ -28,12 +30,24 @@ const usetaskList = (boardId: Board['id']) => {
     try {
       const res = await getTaskListsApi(boardId);
       const obj: TTaskLists = {};
-      res.data.forEach((l) => (obj[l.id] = l));
+      res.data.forEach((l) => {
+        const tIds = l.Task.map((t) => t.id);
+        obj[l.id] = {
+          ...l,
+          Task: tIds,
+        };
+      });
       setLists(obj);
+
+      const _tasks = {};
 
       const sorted = res.data
         .sort((a, b) => a.order - b.order)
-        .map((d) => d.id);
+        .map((d) => {
+          d.Task.map((t) => (_tasks[t.id] = t));
+          return d.id;
+        });
+      setTasks(_tasks);
       setListIds(sorted);
     } catch (e) {
       console.log(e);
@@ -73,7 +87,7 @@ const usetaskList = (boardId: Board['id']) => {
     }
   };
 
-  return { listIds, lists, addList, deleteList };
+  return { tasks, listIds, lists, addList, deleteList };
 };
 
 export default usetaskList;
