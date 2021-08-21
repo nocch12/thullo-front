@@ -17,8 +17,11 @@ import {
 import Link from 'next/link';
 import { VFC } from 'react';
 import { MdAttachFile, MdComment } from 'react-icons/md';
-import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
-import useDND from '../../hooks/useDND';
+import {
+  DraggableProvided,
+  DraggableProvidedDraggableProps,
+  DraggableStateSnapshot,
+} from 'react-beautiful-dnd';
 
 type Props = {
   boardId: Board['id'];
@@ -33,29 +36,31 @@ const TaskCard: VFC<Props> = ({
   taskDraggableProvided,
   snapshot,
 }) => {
-  const { isCurrentDragging } = useDND();
+  const style = taskDraggableProvided.draggableProps.style;
+  const transform = snapshot.isDragging
+    ? `${style.transform} rotate(4deg)`
+    : style.transform;
 
-  const isShadow = isCurrentDragging(task.id.toString());
-  function getStyle(style, snapshot) {
-    if (!snapshot.isDropAnimating) {
+  const getStyle = () => {
+    if (snapshot.isDropAnimating) {
       return style;
     }
     return {
       ...style,
-      // cannot be 0, but make it super tiny
-      // transitionDuration: `1.3s`,
+      transform,
     };
-  }
+  };
+
   return (
     <Box
       w="full"
-      shadow={isShadow ? 'lg' : 'sm'}
+      shadow={snapshot.isDragging ? 'lg' : 'sm'}
       bg="white"
       rounded="md"
       ref={taskDraggableProvided.innerRef}
       {...taskDraggableProvided.draggableProps}
       {...taskDraggableProvided.dragHandleProps}
-      // style={getStyle(taskDraggableProvided.draggableProps.style, snapshot)}
+      style={getStyle()}
     >
       <LinkBox p="2">
         {/* 画像 */}
