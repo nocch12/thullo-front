@@ -8,7 +8,6 @@ import { VFC, useState, useEffect } from 'react';
 
 const boardTop: VFC = () => {
   const [taskId, setTaskId] = useState('');
-  const [state, setstate] = useState({});
   const { getBoardDetail, resetDetail } = useBoardDetail();
   const { query } = useRouter();
   const { boardId, slug } = query;

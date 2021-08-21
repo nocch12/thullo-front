@@ -5,15 +5,22 @@ import {
 } from '../api/taskList';
 import { DEFAULT_ORDER, DND_TYPE } from '../config/const';
 import { Board } from '../types/board';
-import { TTaskList, TTaskListOrder, TTaskLists } from '../types/taskList';
+import {
+  TTaskList,
+  TTaskListFormatted,
+  TTaskListOrder,
+  TTaskLists,
+} from '../types/taskList';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { taskListsOrderState, taskListsState } from '../store/taskList';
 import { TasksState } from '../store/task';
-import { TTasks } from '../types/task';
+import { Task, TTasks } from '../types/task';
 import { DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
+import useTask from './useTask';
 
 const usetaskLists = (boardId: Board['id']) => {
+  const { addTask } = useTask();
   const [lists, setLists] = useState<TTaskLists>({});
   const [listIds, setListIds] = useState<TTaskListOrder>([]);
   const [tasks, setTasks] = useState<TTasks>({});
@@ -28,6 +35,7 @@ const usetaskLists = (boardId: Board['id']) => {
     }
   }, [boardId]);
 
+  // リスト一覧取得
   const getLists = async () => {
     try {
       const res = await getTaskListsApi(boardId);
@@ -58,6 +66,7 @@ const usetaskLists = (boardId: Board['id']) => {
     }
   };
 
+  // リスト追加
   const addList = async (listName: TTaskList['listName']) => {
     try {
       const res = await createTaskListApi(boardId, listName, nextOrder);
@@ -74,6 +83,7 @@ const usetaskLists = (boardId: Board['id']) => {
     }
   };
 
+  // リスト削除
   const deleteList = async (listId: TTaskList['id']) => {
     try {
       const res = await deleteTaskListApi(listId);
@@ -87,6 +97,32 @@ const usetaskLists = (boardId: Board['id']) => {
     } finally {
       console.log('f');
     }
+  };
+
+  // タスク追加
+  const addTaskToLists = async (
+    listId: TTaskList['id'],
+    taskName: Task['taskName']
+  ) => {
+    const oldList = lists[listId];
+    const [lastTaskId] = oldList.Task.slice(-1);
+    const order = tasks[lastTaskId].order + DEFAULT_ORDER;
+    const task = await addTask(listId, taskName, order);
+
+    // タスク追加
+    setTasks((prev) => ({
+      ...prev,
+      [task.id]: task,
+    }));
+
+    const newList: TTaskListFormatted = {
+      ...oldList,
+      Task: [...oldList.Task, task.id],
+    };
+    setLists((prev) => ({
+      ...prev,
+      [newList.id]: newList,
+    }));
   };
 
   // ドラッグ終了処理
@@ -155,7 +191,15 @@ const usetaskLists = (boardId: Board['id']) => {
       taskDragEnd(result);
     }
   };
-  return { tasks, listIds, lists, addList, deleteList, handleDragEnd };
+  return {
+    tasks,
+    listIds,
+    lists,
+    addTaskToLists,
+    addList,
+    deleteList,
+    handleDragEnd,
+  };
 };
 
 export default usetaskLists;

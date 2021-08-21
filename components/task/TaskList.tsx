@@ -28,13 +28,12 @@ import {
   DraggableProvidedDragHandleProps,
   Droppable,
 } from 'react-beautiful-dnd';
-import useDND from '../../hooks/useDND';
-import usetaskList from '../../hooks/useTaskList';
-import { TTasks } from '../../types/task';
+import { Task, TTasks } from '../../types/task';
 
 type Props = {
   tasks: TTasks;
   list: TTaskListFormatted;
+  onAddTask: (taskName: Task['taskName']) => void;
   onDelete: () => void;
   listDragHandleProps?: DraggableProvidedDragHandleProps;
 };
@@ -43,11 +42,11 @@ const TaskListComponent: VFC<Props> = ({
   tasks,
   list,
   onDelete,
+  onAddTask,
   listDragHandleProps,
 }) => {
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
-  const { addTask } = useTask(list);
 
   const ref = useRef();
 
@@ -69,7 +68,7 @@ const TaskListComponent: VFC<Props> = ({
 
   const handleAddComit = async (e: FormEvent) => {
     e.preventDefault();
-    await addTask(taskName);
+    onAddTask(taskName);
     handleAddEnd();
   };
 

@@ -1,4 +1,3 @@
-import { TTaskList } from '../../types/taskList';
 import TaskList from './TaskList';
 import { Box, HStack } from '@chakra-ui/react';
 import { VFC } from 'react';
@@ -12,16 +11,15 @@ type Props = {
 };
 
 const TaskListArea: VFC<Props> = ({ boardId }) => {
-  const { lists, listIds, tasks, addList, deleteList, handleDragEnd } =
-    usetaskLists(boardId);
-
-  const handleDeleteList = async (listId: TTaskList['id']) => {
-    await deleteList(listId);
-  };
-
-  const handleAddList = async (listName: TTaskList['listName']) => {
-    await addList(listName);
-  };
+  const {
+    lists,
+    listIds,
+    tasks,
+    addList,
+    deleteList,
+    handleDragEnd,
+    addTaskToLists,
+  } = usetaskLists(boardId);
 
   return (
     <Box
@@ -63,7 +61,8 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
                         <TaskList
                           list={lists[id]}
                           tasks={tasks}
-                          onDelete={() => handleDeleteList(id)}
+                          onAddTask={(taskName) => addTaskToLists(id, taskName)}
+                          onDelete={() => deleteList(id)}
                           listDragHandleProps={
                             draggableProvided.dragHandleProps
                           }
@@ -78,7 +77,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
           </Droppable>
         </DragDropContext>
         <Box minW="280px">
-          <TaskListAdd onSubmit={handleAddList} />
+          <TaskListAdd onSubmit={addList} />
         </Box>
       </HStack>
     </Box>
