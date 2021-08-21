@@ -1,8 +1,5 @@
-import useTask from '../../hooks/useTask';
 import { TTaskListFormatted } from '../../types/taskList';
-import AddTaskButton from '../button/AddTaskButton';
 import TaskCard from './TaskCard';
-import { Icon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
@@ -10,25 +7,21 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  useBoolean,
-  Input,
-  useOutsideClick,
-  ButtonGroup,
-  Button,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { VFC, useRef, FormEvent, ChangeEvent, useState } from 'react';
-import { MdClose, MdMoreHoriz } from 'react-icons/md';
+import { VFC } from 'react';
+import { MdMoreHoriz } from 'react-icons/md';
 import {
   Draggable,
   DraggableProvidedDragHandleProps,
   Droppable,
 } from 'react-beautiful-dnd';
 import { Task, TTasks } from '../../types/task';
+import TaskCardAdd from './TaskCardAdd';
 
 type Props = {
   tasks: TTasks;
@@ -45,37 +38,12 @@ const TaskListComponent: VFC<Props> = ({
   onAddTask,
   listDragHandleProps,
 }) => {
-  const [taskName, setTaskName] = useState('');
-  const [adding, setAdding] = useBoolean();
-
-  const ref = useRef();
-
   const handleCancel = () => {
     console.log('cancel');
   };
   const handleChange = () => {
     console.log('change');
   };
-
-  const handleAddStart = () => {
-    setAdding.on();
-  };
-
-  const handleAddEnd = () => {
-    setAdding.off();
-    setTaskName('');
-  };
-
-  const handleAddComit = async (e: FormEvent) => {
-    e.preventDefault();
-    onAddTask(taskName);
-    handleAddEnd();
-  };
-
-  useOutsideClick({
-    ref,
-    handler: handleAddEnd,
-  });
 
   return (
     <Flex
@@ -143,42 +111,7 @@ const TaskListComponent: VFC<Props> = ({
               </Draggable>
             ))}
             {dropableProvided.placeholder}
-            {adding ? (
-              <Box
-                as="form"
-                p={2}
-                rounded="md"
-                shadow="sm"
-                bgColor="white"
-                ref={ref}
-                onSubmit={handleAddComit}
-              >
-                <Input
-                  size="sm"
-                  rounded="md"
-                  value={taskName}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setTaskName(e.target.value)
-                  }
-                />
-                <ButtonGroup mt={2} alignItems="center">
-                  <Button type="submit" size="sm" colorScheme="teal">
-                    追加
-                  </Button>
-                  <IconButton
-                    aria-label="cancel"
-                    size="sm"
-                    icon={<Icon as={MdClose} />}
-                    variant="ghost"
-                    onClick={handleAddEnd}
-                  />
-                </ButtonGroup>
-              </Box>
-            ) : (
-              <AddTaskButton size="sm" onClick={handleAddStart}>
-                リストを追加
-              </AddTaskButton>
-            )}
+            <TaskCardAdd onAddTask={onAddTask} />
           </VStack>
         )}
       </Droppable>
