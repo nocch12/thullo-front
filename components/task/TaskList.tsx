@@ -38,6 +38,7 @@ const TaskListComponent: VFC<Props> = ({
   onAddTask,
   listDragHandleProps,
 }) => {
+  if (!list) return null;
   const handleCancel = () => {
     console.log('cancel');
   };

@@ -12,9 +12,6 @@ import {
   TTaskLists,
 } from '../types/taskList';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { taskListsOrderState, taskListsState } from '../store/taskList';
-import { TasksState } from '../store/task';
 import { Task, TTasks } from '../types/task';
 import { DropResult, OnDragEndResponder } from 'react-beautiful-dnd';
 import useTask from './useTask';
@@ -127,12 +124,13 @@ const usetaskLists = (boardId: Board['id']) => {
 
   // ドラッグ終了処理
   const taskDragEnd = (result: DropResult) => {
-    console.log('start', { lists });
-
     const { destination, source, draggableId } = result;
+    if (!destination) return;
+
     const destId = destination.droppableId;
     const sourceId = source.droppableId;
 
+    // 同じ場所なら何もしない
     if (destId === sourceId && destination.index === source.index) {
       return;
     }
@@ -140,6 +138,7 @@ const usetaskLists = (boardId: Board['id']) => {
     const start = lists[sourceId];
     const finish = lists[destId];
 
+    // 同じリスト内の場合
     if (start === finish) {
       const newTaskIds = Array.from(start.Task);
       newTaskIds.splice(source.index, 1);
@@ -159,14 +158,18 @@ const usetaskLists = (boardId: Board['id']) => {
       return;
     }
 
-    // Moving from one list to another
+    // 別のリストへの移動の場合
+    // 移動元からタスクを削除
     const startTaskIds = Array.from(start.Task);
     startTaskIds.splice(source.index, 1);
+
+    // 新しい移動元リスト
     const newStart = {
       ...start,
       Task: startTaskIds,
     };
 
+    // 移動先にタスクを追加
     const finishTaskIds = Array.from(finish.Task);
     finishTaskIds.splice(destination.index, 0, draggableId);
     const newFinish = {
@@ -174,6 +177,7 @@ const usetaskLists = (boardId: Board['id']) => {
       Task: finishTaskIds,
     };
 
+    // 新しいリスト一覧
     const newState = {
       ...lists,
       [newStart.id]: newStart,
@@ -183,12 +187,63 @@ const usetaskLists = (boardId: Board['id']) => {
     setLists(newState);
   };
 
+  const listDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) return;
+
+    const sourceId = listIds[source.index];
+    const sourceList = { ...lists[sourceId] };
+
+    let newOrder = 0;
+    // 先頭に移動する場合
+    if (destination.index === 0) {
+      newOrder = lists[listIds[0]].order / 2;
+    }
+    // 末尾に移動する場合
+    else if (destination.index === listIds.length - 1) {
+      newOrder = lists[listIds.slice(-1)[0]].order + DEFAULT_ORDER;
+    }
+    // それ以外
+    else {
+      // 移動先にあったリスト
+      const prevDestList = lists[listIds[destination.index]];
+
+      // 後ろor前への移動で計算対象を変える
+      const nextIdx =
+        source.index < destination.index
+          ? destination.index + 1
+          : destination.index - 1;
+
+      // 移動先の隣のリスト（orderの計算対象）
+      const nextList = lists[listIds[nextIdx]];
+      newOrder = (prevDestList.order + nextList.order) / 2;
+    }
+
+    const newListIds = [...listIds];
+    newListIds.splice(source.index, 1);
+
+    newListIds.splice(destination.index, 0, Number(draggableId));
+
+    setListIds(newListIds);
+
+    const newLists = {
+      ...lists,
+      [sourceList.id]: { ...sourceList, order: newOrder },
+    };
+    setLists(newLists);
+  };
+
   // ドラッグ終了ハンドラ
   const handleDragEnd: OnDragEndResponder = (result, provided) => {
-    console.log(result);
-
-    if (result.type === DND_TYPE.TASK) {
-      taskDragEnd(result);
+    switch (result?.type) {
+      case DND_TYPE.TASK:
+        taskDragEnd(result);
+        break;
+      case DND_TYPE.LIST:
+        listDragEnd(result);
+        break;
+      default:
+        break;
     }
   };
   return {

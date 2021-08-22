@@ -1,5 +1,5 @@
 import TaskList from './TaskList';
-import { Box, HStack } from '@chakra-ui/react';
+import { Box, Flex, HStack } from '@chakra-ui/react';
 import { VFC } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Board } from '../../types/board';
@@ -26,7 +26,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
       overflowX="auto"
       flexGrow={1}
       bgColor="teal.50"
-      p="4"
+      py={4}
       h="full"
       rounded="md"
       overflowY="hidden"
@@ -42,7 +42,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
             type="LIST"
           >
             {(provided) => (
-              <HStack
+              <Flex
                 alignItems="flex-start"
                 spacing={6}
                 ref={provided.innerRef}
@@ -55,6 +55,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
                         key={id}
                         minW="280px"
                         h="full"
+                        mx={2}
                         ref={draggableProvided.innerRef}
                         {...draggableProvided.draggableProps}
                       >
@@ -72,13 +73,13 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
                   </Draggable>
                 ))}
                 {provided.placeholder}
-              </HStack>
+                <Box minW="280px" mx={2}>
+                  <TaskListAdd onSubmit={addList} />
+                </Box>
+              </Flex>
             )}
           </Droppable>
         </DragDropContext>
-        <Box minW="280px">
-          <TaskListAdd onSubmit={addList} />
-        </Box>
       </HStack>
     </Box>
   );
