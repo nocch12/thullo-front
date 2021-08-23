@@ -20,9 +20,13 @@ type Props = {
 const TaskCardAdd: VFC<Props> = ({ onAddTask }) => {
   const [taskName, setTaskName] = useState('');
   const [adding, setAdding] = useBoolean();
+  const inputRef = useRef<HTMLInputElement>();
 
   const handleAddStart = () => {
     setAdding.on();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 1);
   };
 
   const handleAddEnd = () => {
@@ -42,41 +46,47 @@ const TaskCardAdd: VFC<Props> = ({ onAddTask }) => {
     handler: handleAddEnd,
   });
 
-  return adding ? (
-    <Box
-      as="form"
-      p={2}
-      rounded="md"
-      shadow="sm"
-      bgColor="white"
-      ref={ref}
-      onSubmit={handleAddComit}
-    >
-      <Input
-        size="sm"
+  return (
+    <>
+      <Box
+        as="form"
+        p={2}
         rounded="md"
-        value={taskName}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setTaskName(e.target.value)
-        }
-      />
-      <ButtonGroup mt={2} alignItems="center">
-        <Button type="submit" size="sm" colorScheme="teal">
-          追加
-        </Button>
-        <IconButton
-          aria-label="cancel"
+        shadow="sm"
+        bgColor="white"
+        ref={ref}
+        hidden={!adding}
+        onSubmit={handleAddComit}
+      >
+        <Input
           size="sm"
-          icon={<Icon as={MdClose} />}
-          variant="ghost"
-          onClick={handleAddEnd}
+          rounded="md"
+          value={taskName}
+          ref={inputRef}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setTaskName(e.target.value)
+          }
         />
-      </ButtonGroup>
-    </Box>
-  ) : (
-    <AddTaskButton size="sm" onClick={handleAddStart}>
-      タスクを追加
-    </AddTaskButton>
+        <ButtonGroup mt={2} alignItems="center">
+          <Button type="submit" size="sm" colorScheme="teal">
+            追加
+          </Button>
+          <IconButton
+            aria-label="cancel"
+            size="sm"
+            icon={<Icon as={MdClose} />}
+            variant="ghost"
+            onClick={handleAddEnd}
+          />
+        </ButtonGroup>
+      </Box>
+
+      <Box hidden={adding}>
+        <AddTaskButton size="sm" onClick={handleAddStart}>
+          タスクを追加
+        </AddTaskButton>
+      </Box>
+    </>
   );
 };
 

@@ -83,9 +83,14 @@ const usetaskLists = (boardId: Board['id']) => {
   };
 
   // リスト削除
-  const deleteList = async (listId: TTaskList['id']) => {
+  const deleteList = async (listId: TTaskList['id'], index: number) => {
     try {
       const res = await deleteTaskListApi(listId);
+      setListIds((prev) => {
+        const newIds = [...prev];
+        newIds.splice(index, 1);
+        return newIds;
+      });
       setLists((prev) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [listId]: _, ...filtered } = prev;

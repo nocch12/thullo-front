@@ -8,7 +8,7 @@ import {
   useBoolean,
   useOutsideClick,
 } from '@chakra-ui/react';
-import { ChangeEvent, useRef, useState, VFC } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState, VFC } from 'react';
 import { MdClose } from 'react-icons/md';
 import { TTaskList } from '../../types/taskList';
 import AddTaskButton from '../button/AddTaskButton';
@@ -20,16 +20,25 @@ type Props = {
 const TaskListAdd: VFC<Props> = ({ onSubmit }) => {
   const [adding, setAdding] = useBoolean();
   const [listName, setListName] = useState('');
-
   const ref = useRef();
+  const inputRef = useRef<HTMLInputElement>();
 
   const handleAddStart = () => {
     setAdding.on();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 1);
   };
 
   const handleAddEnd = () => {
     setAdding.off();
     setListName('');
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(listName);
+    handleAddEnd();
   };
 
   useOutsideClick({
@@ -45,12 +54,13 @@ const TaskListAdd: VFC<Props> = ({ onSubmit }) => {
       shadow="sm"
       bgColor="white"
       ref={ref}
-      onSubmit={() => onSubmit(listName)}
+      onSubmit={handleSubmit}
     >
       <Input
         size="sm"
         rounded="md"
         value={listName}
+        ref={inputRef}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setListName(e.target.value)
         }

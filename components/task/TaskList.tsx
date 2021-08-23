@@ -96,6 +96,7 @@ const TaskListComponent: VFC<Props> = ({
             p={2}
             overflowY="auto"
             flex={1}
+            alignItems="stretch"
             ref={dropableProvided.innerRef}
             {...dropableProvided.droppableProps}
           >

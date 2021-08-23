@@ -23,15 +23,15 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
 
   return (
     <Box
-      overflowX="auto"
       flexGrow={1}
       bgColor="teal.50"
       py={4}
       h="full"
       rounded="md"
+      overflowX="auto"
       overflowY="hidden"
     >
-      <HStack alignItems="flex-start" spacing={6}>
+      <HStack alignItems="flex-start" spacing={6} h="full">
         <DragDropContext
           // onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
@@ -45,6 +45,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
               <Flex
                 alignItems="flex-start"
                 spacing={6}
+                h="full"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -63,7 +64,7 @@ const TaskListArea: VFC<Props> = ({ boardId }) => {
                           list={lists[id]}
                           tasks={tasks}
                           onAddTask={(taskName) => addTaskToLists(id, taskName)}
-                          onDelete={() => deleteList(id)}
+                          onDelete={() => deleteList(id, index)}
                           listDragHandleProps={
                             draggableProvided.dragHandleProps
                           }
