@@ -2,6 +2,7 @@ import {
   createTaskList as createTaskListApi,
   deleteTaskList as deleteTaskListApi,
   getTaskLists as getTaskListsApi,
+  updateTaskList as updateTaskListApi,
 } from '../api/taskList';
 import { DEFAULT_ORDER, DND_TYPE } from '../config/const';
 import { Board } from '../types/board';
@@ -187,9 +188,12 @@ const usetaskLists = (boardId: Board['id']) => {
     setLists(newState);
   };
 
-  const listDragEnd = (result: DropResult) => {
+  const listDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
+
+    // 通信エラー時にロールバックするため現在の状態を補完
+    const listsBackup = { ...lists };
 
     const sourceId = listIds[source.index];
     const sourceList = { ...lists[sourceId] };
@@ -231,6 +235,13 @@ const usetaskLists = (boardId: Board['id']) => {
       [sourceList.id]: { ...sourceList, order: newOrder },
     };
     setLists(newLists);
+
+    try {
+      const res = await updateTaskListApi(sourceList.id, { order: newOrder });
+      console.log(res);
+    } catch (e) {
+      setLists(listsBackup);
+    }
   };
 
   // ドラッグ終了ハンドラ
