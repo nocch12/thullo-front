@@ -1,3 +1,4 @@
+import { TTaskList } from './taskList';
 import { TSimpleUser } from './user';
 
 export type TTasks = {
@@ -7,6 +8,7 @@ export type TTasks = {
 export type Task = {
   id: number;
   taskName: string;
+  listId: TTaskList['id'];
   order: number;
   imgePath?: string;
   commentCount?: number;

@@ -14,3 +14,14 @@ export const createTask = (
     order,
   });
 };
+
+// タスク更新
+export const updateTask = (
+  taskId: Task['id'],
+  params: Partial<Pick<Task, 'listId' | 'order'>> = {}
+) => {
+  if (!params.listId && !params.order) {
+    return false;
+  }
+  return axios.post<TTaskList>(`/task/${taskId}`, params);
+};

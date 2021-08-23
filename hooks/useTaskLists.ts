@@ -4,6 +4,7 @@ import {
   getTaskLists as getTaskListsApi,
   updateTaskList as updateTaskListApi,
 } from '../api/taskList';
+import { updateTask as updateTaskApi } from '../api/task';
 import { DEFAULT_ORDER, DND_TYPE } from '../config/const';
 import { Board } from '../types/board';
 import {
@@ -123,13 +124,20 @@ const usetaskLists = (boardId: Board['id']) => {
     }));
   };
 
-  // ドラッグ終了処理
-  const taskDragEnd = (result: DropResult) => {
+  // タスク移動処理
+  const taskDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
+    const taskId = Number(draggableId);
     if (!destination) return;
 
-    const destId = destination.droppableId;
-    const sourceId = source.droppableId;
+    // 通信エラー時にロールバックするため現在の状態を補完
+    const backUp = {
+      lists: { ...lists },
+      tasks: { ...tasks },
+    };
+
+    const destId = Number(destination.droppableId);
+    const sourceId = Number(source.droppableId);
 
     // 同じ場所なら何もしない
     if (destId === sourceId && destination.index === source.index) {
@@ -139,11 +147,41 @@ const usetaskLists = (boardId: Board['id']) => {
     const start = lists[sourceId];
     const finish = lists[destId];
 
+    let newOrder = 0;
+    // 先頭に移動する場合
+    if (destination.index === 0) {
+      if (finish.Task.length) {
+        newOrder = tasks[finish.Task[0]].order / 2;
+      } else {
+        newOrder = DEFAULT_ORDER;
+      }
+    }
+    // 末尾に移動する場合
+    else if (destination.index === finish.Task.length) {
+      newOrder = tasks[finish.Task.slice(-1)[0]].order + DEFAULT_ORDER;
+    }
+    // それ以外
+    else {
+      // 移動後にあったタスク
+      const nextTask = tasks[finish.Task[destination.index]];
+
+      // 同じリストで後ろへの移動の場合、計算対象を変える
+      const prevIdx =
+        sourceId === destId && source.index < destination.index
+          ? destination.index + 1
+          : destination.index - 1;
+
+      // 移動先の隣のタスク（orderの計算対象）
+      const prevTask = tasks[finish.Task[prevIdx]];
+
+      newOrder = (nextTask.order + prevTask.order) / 2;
+    }
+
     // 同じリスト内の場合
     if (start === finish) {
-      const newTaskIds = Array.from(start.Task);
+      const newTaskIds = [...start.Task];
       newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
+      newTaskIds.splice(destination.index, 0, taskId);
 
       const newColumn = {
         ...start,
@@ -156,44 +194,65 @@ const usetaskLists = (boardId: Board['id']) => {
       };
 
       setLists(newLists);
-      return;
+
+      const newTasks = {
+        ...tasks,
+        [taskId]: { ...tasks[taskId], order: newOrder },
+      };
+      setTasks(newTasks);
+    } else {
+      // 別のリストへの移動の場合
+      // 移動元からタスクを削除
+      const startTaskIds = Array.from(start.Task);
+      startTaskIds.splice(source.index, 1);
+
+      // 新しい移動元リスト
+      const newStart = {
+        ...start,
+        Task: startTaskIds,
+      };
+
+      // 移動先にタスクを追加
+      const finishTaskIds = Array.from(finish.Task);
+      finishTaskIds.splice(destination.index, 0, taskId);
+      const newFinish = {
+        ...finish,
+        Task: finishTaskIds,
+      };
+
+      // 新しいリスト一覧
+      const newLists = {
+        ...lists,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish,
+      };
+
+      setLists(newLists);
+
+      const newTasks = {
+        ...tasks,
+        [taskId]: { ...tasks[taskId], listId: destId, order: newOrder },
+      };
+      setTasks(newTasks);
     }
 
-    // 別のリストへの移動の場合
-    // 移動元からタスクを削除
-    const startTaskIds = Array.from(start.Task);
-    startTaskIds.splice(source.index, 1);
-
-    // 新しい移動元リスト
-    const newStart = {
-      ...start,
-      Task: startTaskIds,
-    };
-
-    // 移動先にタスクを追加
-    const finishTaskIds = Array.from(finish.Task);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      Task: finishTaskIds,
-    };
-
-    // 新しいリスト一覧
-    const newState = {
-      ...lists,
-      [newStart.id]: newStart,
-      [newFinish.id]: newFinish,
-    };
-
-    setLists(newState);
+    try {
+      await updateTaskApi(taskId, { listId: destId, order: newOrder });
+    } catch (e) {
+      setLists(backUp.lists);
+      setTasks(backUp.tasks);
+    }
   };
 
   const listDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
 
-    // 通信エラー時にロールバックするため現在の状態を補完
-    const listsBackup = { ...lists };
+    // 通信エラー時にロールバックするため現在の状態を保管
+    const backUp = {
+      lists: { ...lists },
+      listIds: [...listIds],
+    };
 
     const sourceId = listIds[source.index];
     const sourceList = { ...lists[sourceId] };
@@ -237,10 +296,11 @@ const usetaskLists = (boardId: Board['id']) => {
     setLists(newLists);
 
     try {
-      const res = await updateTaskListApi(sourceList.id, { order: newOrder });
-      console.log(res);
+      // 描画の問題から後でバックエンドでもデータ更新
+      await updateTaskListApi(sourceList.id, { order: newOrder });
     } catch (e) {
-      setLists(listsBackup);
+      setListIds(backUp.listIds);
+      setLists(backUp.lists);
     }
   };
 

@@ -20,7 +20,7 @@ export const createTaskList = (
   });
 };
 
-// タスクリスト作成
+// タスクリスト更新
 export const updateTaskList = (
   listId: TTaskList['id'],
   params: Partial<Pick<TTaskList, 'listName' | 'order'>> = {}
